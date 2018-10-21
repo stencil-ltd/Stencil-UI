@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using Ads;
+using Analytics;
 using CustomOrder;
 using Dev;
 using Plugins.UI;
@@ -29,6 +30,8 @@ namespace Init
             base.Awake();
             if (!Valid) return;
             Application.targetFrameRate = 60;
+            Screen.orientation = ScreenOrientation.Portrait;
+            var _ = Tracking.Instance;
             gameObject.AddComponent<Gestures>();
             gameObject.AddComponent<GestureReport>();
             new GameObject("Main Thread Dispatch").AddComponent<UnityMainThreadDispatcher>();
