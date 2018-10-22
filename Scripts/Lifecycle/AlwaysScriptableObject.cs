@@ -14,7 +14,7 @@ namespace Lifecycle
 #endif
         public static void Refresh()
         {
-            var obj = GameObject.Find("Always Loaded");
+            var obj = GameObject.FindObjectOfType<AlwaysLoaded>()?.gameObject;
             if (obj == null)
             {
                 obj = new GameObject("Always Loaded");
