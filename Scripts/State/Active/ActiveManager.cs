@@ -1,6 +1,10 @@
+using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UI;
 using UnityEngine;
+using Util;
+using Util.Coroutines;
 
 namespace State.Active
 {
@@ -15,6 +19,10 @@ namespace State.Active
 
         public readonly List<ActiveGate> Gates = new List<ActiveGate>();
         public bool ActiveInEditor;
+
+        [Header("Transitions")] 
+        public float FadeExitDuration;
+        [CanBeNull] public string ExitTrigger;
 
         public override void Register()
         {
@@ -54,6 +62,30 @@ namespace State.Active
                     case Operation.Or:
                         active |= check.Value;
                         break;
+                }
+            }
+            Objects.StartCoroutine(SetActiveInternal(active));
+        }
+
+        private IEnumerator SetActiveInternal(bool active)
+        {
+            if (active == gameObject.activeSelf) yield break;
+            if (!active && !string.IsNullOrEmpty(ExitTrigger))
+            {
+                if (FadeExitDuration > 0f)
+                {
+                    yield return new WaitForTween(LeanTween.alphaCanvas(GetComponent<CanvasGroup>(), 0f,
+                        FadeExitDuration));
+                }
+                else if (!string.IsNullOrEmpty(ExitTrigger))
+                {
+                    var anim = GetComponent<Animator>();
+                    if (anim != null)
+                    {
+                        anim.SetTrigger(ExitTrigger);
+                        yield return null;
+                        yield return new WaitForSeconds(anim.GetCurrentAnimatorClipInfo(0)[0].clip.length);                   
+                    }
                 }
             }
             gameObject.SetActive(active);
