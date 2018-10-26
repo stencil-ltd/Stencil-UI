@@ -72,12 +72,7 @@ namespace State.Active
             if (active == gameObject.activeSelf) yield break;
             if (!active && !string.IsNullOrEmpty(ExitTrigger))
             {
-                if (FadeExitDuration > 0f)
-                {
-                    yield return new WaitForTween(LeanTween.alphaCanvas(GetComponent<CanvasGroup>(), 0f,
-                        FadeExitDuration));
-                }
-                else if (!string.IsNullOrEmpty(ExitTrigger))
+                if (!string.IsNullOrEmpty(ExitTrigger))
                 {
                     var anim = GetComponent<Animator>();
                     if (anim != null)
@@ -86,6 +81,10 @@ namespace State.Active
                         yield return null;
                         yield return new WaitForSeconds(anim.GetCurrentAnimatorClipInfo(0)[0].clip.length);                   
                     }
+                } else if (FadeExitDuration > 0f)
+                {
+                    yield return new WaitForTween(LeanTween.alphaCanvas(GetComponent<CanvasGroup>(), 0f,
+                        FadeExitDuration));
                 }
             }
             gameObject.SetActive(active);
