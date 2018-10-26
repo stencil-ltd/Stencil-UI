@@ -131,6 +131,7 @@ namespace Plugins.UI
 
         private void _SetLocked(bool locked)
         {
+            if (eventSystem == null) eventSystem = EventSystem.current;
             eventSystem.enabled = !locked;
         }
 
