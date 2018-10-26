@@ -79,7 +79,9 @@ namespace State.Active
                     {
                         anim.SetTrigger(ExitTrigger);
                         yield return null;
-                        yield return new WaitForSeconds(anim.GetCurrentAnimatorClipInfo(0)[0].clip.length);                   
+                        var info = anim.GetCurrentAnimatorClipInfo(0);
+                        if (info != null && info.Length > 0)
+                            yield return new WaitForSeconds(info[0].clip.length);                   
                     }
                 } else if (FadeExitDuration > 0f)
                 {
