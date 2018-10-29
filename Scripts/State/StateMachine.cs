@@ -51,8 +51,8 @@ namespace State
         protected override void OnEnable()
         {
             base.OnEnable();
-            if (!typeof(T).IsEnum)
-                throw new Exception("StateMachine can only handle enums.");
+//            if (!typeof(T).IsEnum)
+//                throw new Exception("StateMachine can only handle enums.");
             StateMachines.Register(this);
         }
 
