@@ -139,5 +139,11 @@ namespace Plugins.UI
         {
             if (--lockCount == 0) _SetLocked(false);
         }
+
+        public void ResetLock()
+        {
+            lockCount = 0;
+            _SetLocked(false);
+        }
     }
 }
