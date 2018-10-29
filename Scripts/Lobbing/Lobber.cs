@@ -58,8 +58,11 @@ namespace Lobbing
 
         public IEnumerator LobSingle(long amount, bool applyRandomization = false, LobOverrides overrides = null)
         {
-            var obj = Instantiate(Prefab, Container ?? To.parent);
-            obj.transform.position = From.position;
+            var from = overrides?.From ?? From;
+            var to = overrides?.To ?? To;
+            
+            var obj = Instantiate(Prefab, Container ?? to.parent);
+            obj.transform.position = from.position;
             if (ForceToUi)
                 obj.transform.CastIntoUi();
             obj.transform.SetAsLastSibling();
@@ -79,12 +82,15 @@ namespace Lobbing
             
             var lob = new Lob(obj, amount, style);
             Begin(lob);
-            yield return Objects.StartCoroutine(Function.Lob(lob, From, To));
+            yield return Objects.StartCoroutine(Function.Lob(lob, from, to));
             End(lob);
         }
 
         public IEnumerator LobMany(long amount, LobOverrides overrides = null)
         {
+            var from = overrides?.From ?? From;
+            var to = overrides?.To ?? To;
+
             var routines = new List<Coroutine>();
             var remaining = amount;
             var division = Division;
@@ -93,7 +99,7 @@ namespace Lobbing
 
             if (FromParticleSingle)
             {
-                var part = Instantiate(FromParticleSingle, From.position, Quaternion.identity, Container ?? To.parent);
+                var part = Instantiate(FromParticleSingle, from.position, Quaternion.identity, Container ?? to.parent);
                 if (ForceToUi)
                     part.transform.CastIntoUi();
             }
@@ -126,6 +132,8 @@ namespace Lobbing
 
             foreach (var r in routines)
                 yield return r;
+            
+            overrides?.OnManyComplete?.Invoke();
         }
 
         private void Begin(Lob lob)

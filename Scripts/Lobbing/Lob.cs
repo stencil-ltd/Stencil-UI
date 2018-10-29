@@ -5,16 +5,12 @@ using UnityEngine;
 namespace Lobbing
 {    
     [Serializable]
-    public struct LobStyle
+    public class LobStyle
     {
-        public float Duration;
-        public bool Elastic;
+        public float Duration = 1f;
+        public bool Elastic = true;
 
-        public static readonly LobStyle Standard = new LobStyle
-        {
-            Duration = 1f,
-            Elastic = true
-        };
+        public static LobStyle Standard => new LobStyle();
     }
     
     [Serializable]
@@ -27,7 +23,7 @@ namespace Lobbing
         
         [CanBeNull] public readonly object Payload;
 
-        public Lob(GameObject projectile, long amount, LobStyle? style = null, [CanBeNull] object payload = null)
+        public Lob(GameObject projectile, long amount, [CanBeNull] LobStyle style = null, [CanBeNull] object payload = null)
         {
             Id = Guid.NewGuid().ToString();
             Projectile = projectile;
@@ -45,5 +41,10 @@ namespace Lobbing
 
         public bool OverrideDivision;
         public LobDivision Division;
+
+        public Transform From;
+        public Transform To;
+
+        [CanBeNull] public Action OnManyComplete;
     }
 }
