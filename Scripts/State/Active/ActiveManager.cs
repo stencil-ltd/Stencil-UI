@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Scripts.Util;
 using UI;
 using UnityEngine;
 using Util;
@@ -78,10 +79,7 @@ namespace State.Active
                     if (anim != null)
                     {
                         anim.SetTrigger(ExitTrigger);
-                        yield return null;
-                        var info = anim.GetCurrentAnimatorClipInfo(0);
-                        if (info != null && info.Length > 0)
-                            yield return new WaitForSeconds(info[0].clip.length);                   
+                        yield return anim.Await(0.1f);
                     }
                 } else if (FadeExitDuration > 0f)
                 {
