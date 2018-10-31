@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.PerformanceData;
 using Standard.Audio;
 using UnityEngine;
 using UnityEngine.Events;
@@ -28,6 +29,8 @@ namespace Lobbing
 
     public class Lobber : MonoBehaviour
     {
+        public static int ActiveCount = 0;
+        
         [Header("General")] 
         public bool ForceToUi = true;
         
@@ -138,6 +141,7 @@ namespace Lobbing
 
         private void Begin(Lob lob)
         {
+            ActiveCount++;
             if (FromParticle != null)
             {
                 var part = Instantiate(FromParticle, lob.Projectile.transform.position, Quaternion.identity, lob.Projectile.transform.parent);
@@ -160,6 +164,7 @@ namespace Lobbing
             SfxOneShot.Instance.Play(SfxEnd);
             OnLobEnded?.Invoke(lob);
             Destroy(lob.Projectile);
+            ActiveCount--;
         }
     }
 }
