@@ -7,6 +7,7 @@
         private void Awake()
         {
             Instance = (T)this;
+            OnAwake();
         }
 
         private void OnEnable()
@@ -23,5 +24,7 @@
         {
             Instance = Instance == this ? null : Instance;
         }
+        
+        protected virtual void OnAwake() {}
     }
 }
