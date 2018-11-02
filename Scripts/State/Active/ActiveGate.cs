@@ -13,5 +13,7 @@ namespace State.Active
             ActiveManager = manager;
         }
         public virtual void Unregister() {}
+
+        public void RequestCheck() => ActiveManager.Check();
     }
 }
