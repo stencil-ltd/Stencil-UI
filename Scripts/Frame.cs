@@ -120,17 +120,17 @@ namespace Plugins.UI
 
         public void SetBannerHeight(float pixelHeight, bool top)
         {
-            _bannerHeight = pixelHeight;
+            var ratio = 1f;
             if (StencilAds.BannerNeedsScale)
             {
                 var scaler = GetComponentInParent<CanvasScaler>();
                 if (scaler == null) return;
-                var ratio = scaler.referenceResolution.x / Screen.width;
-                _bannerHeight *= ratio;
+                ratio = scaler.referenceResolution.x / Screen.width;
             }
+            _bannerHeight = pixelHeight * ratio;
             SetScrim(top);
             SetContents(top);
-            Debug.Log($"Setting banner height to {_bannerHeight}");
+            Debug.Log($"Setting banner height to {_bannerHeight} ({pixelHeight} x {ratio:N2})");
             Scrim?.gameObject.SetActive(pixelHeight >= 1f);
         }
 
