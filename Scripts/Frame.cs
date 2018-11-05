@@ -1,5 +1,5 @@
 ﻿using System;
-using Ads.Admob;
+using Ads;
 using Binding;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -25,6 +25,7 @@ namespace Plugins.UI
         
         [Tooltip("This frame will auto-adjust to the ad area.")]
         public bool AutoAdZone = true;
+        public float BannerNudge = 20f;
 
         [Header("Debug")] 
         public bool DebugNotch;
@@ -61,7 +62,7 @@ namespace Plugins.UI
         void Start()
         {
             if (_bannerHeight <= 1f) SetBannerHeight(0f, true);
-            AdmobBannerArea.OnChange += OnBanner;
+            StencilAds.OnBannerChange += OnBanner;
             OnBanner(null, null);
             
             if (GraphicMask != null)
@@ -73,7 +74,7 @@ namespace Plugins.UI
 
         private void OnBanner(object sender, EventArgs eventArgs)
         {
-            SetBannerHeight(AdmobBannerArea.BannerHeight, AdmobBannerArea.IsTop);
+            SetBannerHeight(StencilAds.BannerHeight, false);
         }
 
         void OnMouseUpAsButton()
@@ -89,7 +90,7 @@ namespace Plugins.UI
         void OnDestroy()
         {
             if (Instance == this) Instance = null;
-            AdmobBannerArea.OnChange -= OnBanner;
+            StencilAds.OnBannerChange -= OnBanner;
         }
 
         public void Lock()
@@ -111,7 +112,7 @@ namespace Plugins.UI
             var hTop = TopSafePadding;
             if (top) hTop += _bannerHeight;
             var hBot = BottomSafePadding;
-            if (!top) hBot += _bannerHeight;
+            if (!top) hBot += _bannerHeight + BannerNudge;
             Debug.Log($"Set Contents {hTop}x{hBot}");
             Contents.offsetMax = new Vector2(0, -hTop);
             Contents.offsetMin = new Vector2(0, hBot);
@@ -119,10 +120,14 @@ namespace Plugins.UI
 
         public void SetBannerHeight(float pixelHeight, bool top)
         {
-            var scaler = GetComponentInParent<CanvasScaler>();
-            if (scaler == null) return;
-            var ratio = scaler.referenceResolution.x / Screen.width;
-            _bannerHeight = pixelHeight * ratio;
+            _bannerHeight = pixelHeight;
+            if (StencilAds.BannerNeedsScale)
+            {
+                var scaler = GetComponentInParent<CanvasScaler>();
+                if (scaler == null) return;
+                var ratio = scaler.referenceResolution.x / Screen.width;
+                _bannerHeight *= ratio;
+            }
             SetScrim(top);
             SetContents(top);
             Debug.Log($"Setting banner height to {_bannerHeight}");

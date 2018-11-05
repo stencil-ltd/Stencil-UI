@@ -27,7 +27,8 @@ namespace Util
         {
             _button.enabled = false;
             yield return new WaitForSeconds(Delay);
-            _button.enabled = true;
+            if (_button) 
+                _button.enabled = true;
         }
     }
 }
