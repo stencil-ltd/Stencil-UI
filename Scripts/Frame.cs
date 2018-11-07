@@ -50,7 +50,7 @@ namespace Plugins.UI
             var safe = SafeArea;
             TopSafePadding = Screen.height - safe.yMax;
             BottomSafePadding = safe.yMin;
-            if (Developers.Enabled && DebugNotch)
+            if (Application.isEditor && Developers.Enabled && DebugNotch)
             {
                 if (DebugNotchTop >= 1f)
                     TopSafePadding = DebugNotchTop;
@@ -127,6 +127,10 @@ namespace Plugins.UI
                 if (scaler == null) return;
                 ratio = scaler.referenceResolution.x / Screen.width;
             }
+
+            if (Application.isEditor)
+                ratio = 2f;
+            
             _bannerHeight = pixelHeight * ratio;
             SetScrim(top);
             SetContents(top);
