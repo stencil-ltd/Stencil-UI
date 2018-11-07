@@ -63,6 +63,10 @@ namespace Plugins.UI
                 if (DebugNotchBottom >= 1f)
                     BottomSafePadding = DebugNotchBottom;
             }
+
+            if (BottomSafePadding >= 1f)
+                BottomSafePadding += AdSettings.Instance.NudgeBottomSafeZone;
+            
             _scaler = GetComponentInParent<CanvasScaler>();
             _canvas = _scaler.GetComponent<Canvas>();
         }
@@ -134,21 +138,7 @@ namespace Plugins.UI
             else if (StencilAds.BannerNeedsScale)
                 ratio = FinalScale;
             
-//            Debug.Log($"scale factor: {ScaleFactor}\n" +
-//                      $"size factor: {SizeFactor}\n" +
-//                      $"final scale: {FinalScale}\n" +
-//                      $"ratio: {ratio}\n" +
-//                      $"dpi: {Screen.dpi}\n" +
-//                      $"canvas: {_canvas.scaleFactor}\n" +
-//                      $"scale: {_scaler.scaleFactor}\n" +
-//                      $"ref: {_scaler.referencePixelsPerUnit}\n" +
-//                      $"default: {_scaler.defaultSpriteDPI}\n" +
-//                      $"fallback: {_scaler.fallbackScreenDPI}");
-            
             _bannerHeight = pixelHeight * ratio;
-            if (pixelHeight >= 1f && !top)
-                _bannerHeight += AdSettings.Instance.NudgeBottomSafeZone;
-            
             SetScrim(top);
             SetContents(top);
             Debug.Log($"Setting banner height to {_bannerHeight} ({pixelHeight} x {ratio:N2})");
