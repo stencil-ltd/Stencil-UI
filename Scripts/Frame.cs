@@ -40,6 +40,12 @@ namespace Plugins.UI
         private int lockCount;
         private EventSystem eventSystem;
 
+        private CanvasScaler _scaler;
+        private Canvas _canvas;
+
+        private float SizeFactor => _scaler.referenceResolution.x / Screen.width;
+        private float FinalScale => SizeFactor;
+        
         private float _bannerHeight;
 
         private void Awake()
@@ -57,6 +63,8 @@ namespace Plugins.UI
                 if (DebugNotchBottom >= 1f)
                     BottomSafePadding = DebugNotchBottom;
             }
+            _scaler = GetComponentInParent<CanvasScaler>();
+            _canvas = _scaler.GetComponent<Canvas>();
         }
 
         void Start()
@@ -121,17 +129,26 @@ namespace Plugins.UI
         public void SetBannerHeight(float pixelHeight, bool top)
         {
             var ratio = 1f;
-            if (StencilAds.BannerNeedsScale)
-            {
-                var scaler = GetComponentInParent<CanvasScaler>();
-                if (scaler == null) return;
-                ratio = scaler.referenceResolution.x / Screen.width;
-            }
-
-            if (Application.isEditor)
+            if (Application.isEditor) 
                 ratio = 2f;
+            else if (StencilAds.BannerNeedsScale)
+                ratio = FinalScale;
+            
+//            Debug.Log($"scale factor: {ScaleFactor}\n" +
+//                      $"size factor: {SizeFactor}\n" +
+//                      $"final scale: {FinalScale}\n" +
+//                      $"ratio: {ratio}\n" +
+//                      $"dpi: {Screen.dpi}\n" +
+//                      $"canvas: {_canvas.scaleFactor}\n" +
+//                      $"scale: {_scaler.scaleFactor}\n" +
+//                      $"ref: {_scaler.referencePixelsPerUnit}\n" +
+//                      $"default: {_scaler.defaultSpriteDPI}\n" +
+//                      $"fallback: {_scaler.fallbackScreenDPI}");
             
             _bannerHeight = pixelHeight * ratio;
+            if (pixelHeight >= 1f && !top)
+                _bannerHeight += AdSettings.Instance.NudgeBottomSafeZone;
+            
             SetScrim(top);
             SetContents(top);
             Debug.Log($"Setting banner height to {_bannerHeight} ({pixelHeight} x {ratio:N2})");
