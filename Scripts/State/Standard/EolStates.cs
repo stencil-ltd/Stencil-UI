@@ -10,8 +10,6 @@ namespace Standard.States
         {
             None,
             Challenge,
-            CrateOpen, 
-            CratePurchase, 
             Unlocked
         }   
     }

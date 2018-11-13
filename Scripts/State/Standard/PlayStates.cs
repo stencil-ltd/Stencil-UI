@@ -15,6 +15,8 @@ namespace Standard.States
             Finished, 
             Share, 
             Options,
+            CrateOpen, 
+            CratePurchase,
             NeedCash
         }   
     }
