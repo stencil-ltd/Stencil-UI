@@ -107,9 +107,9 @@ namespace Init
         protected virtual IEnumerator Start()
         {
             Started = true;
-            yield return null;
             StencilAds.Init();
             OnSettled();
+            yield break;
         }
     }
 }
