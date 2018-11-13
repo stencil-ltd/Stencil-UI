@@ -47,7 +47,7 @@ namespace State
         public readonly string Name = typeof(T).ShortName();
     
         public event EventHandler<StateChange<T>> OnChange;
-
+        
         protected override void OnEnable()
         {
             base.OnEnable();
