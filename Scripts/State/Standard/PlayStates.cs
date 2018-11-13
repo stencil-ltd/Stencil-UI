@@ -14,7 +14,8 @@ namespace Standard.States
             Playing, 
             Finished, 
             Share, 
-            Options
+            Options,
+            NeedCash
         }   
     }
 }

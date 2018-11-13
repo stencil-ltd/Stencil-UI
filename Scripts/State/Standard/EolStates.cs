@@ -12,8 +12,7 @@ namespace Standard.States
             Challenge,
             CrateOpen, 
             CratePurchase, 
-            Unlocked, 
-            NeedCash
+            Unlocked
         }   
     }
 }
