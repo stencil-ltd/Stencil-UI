@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.PerformanceData;
+using JetBrains.Annotations;
 using Standard.Audio;
 using UnityEngine;
 using UnityEngine.Events;
@@ -15,9 +16,9 @@ namespace Lobbing
     {
         public bool ConcreteAmount = false;
         public float AmountPerLob = 0.1f;
-        public float RandomizeAmount = 0.5f;
+        public float RandomizeAmount = 0f;
         
-        public float Interval = 0.2f;
+        public float Interval = 0.1f;
         public float RandomizeInterval = 0f;
 
         public float RandomizeDuration = 0f;
@@ -86,7 +87,7 @@ namespace Lobbing
             var lob = new Lob(obj, amount, style);
             Begin(lob);
             yield return Objects.StartCoroutine(Function.Lob(lob, from, to));
-            End(lob);
+            End(lob, overrides);
         }
 
         public IEnumerator LobMany(long amount, LobOverrides overrides = null)
@@ -152,7 +153,7 @@ namespace Lobbing
             OnLobBegan?.Invoke(lob);
         }
 
-        private void End(Lob lob)
+        private void End(Lob lob, [CanBeNull] LobOverrides overrides)
         {
             if (ToParticle != null)
             {
@@ -163,6 +164,7 @@ namespace Lobbing
             
             SfxOneShot.Instance.Play(SfxEnd);
             OnLobEnded?.Invoke(lob);
+            overrides?.OnComplete(lob);
             Destroy(lob.Projectile);
             ActiveCount--;
         }

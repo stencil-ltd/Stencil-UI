@@ -1,13 +1,14 @@
 using System;
 using JetBrains.Annotations;
 using UnityEngine;
+using Util;
 
 namespace Lobbing
 {    
     [Serializable]
     public class LobStyle
     {
-        public float Duration = 1f;
+        public float Duration = 0.4f;
         public bool Elastic = true;
 
         public static LobStyle Standard => new LobStyle();
@@ -46,5 +47,9 @@ namespace Lobbing
         public Transform To;
 
         [CanBeNull] public Action OnManyComplete;
+        
+        public event EventHandler<Lob> OnEachComplete;
+
+        public void OnComplete(Lob lob) => OnEachComplete?.Invoke(null, lob);
     }
 }
