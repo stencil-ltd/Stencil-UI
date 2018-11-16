@@ -62,10 +62,11 @@ namespace Lobbing
 
         public IEnumerator LobSingle(long amount, bool applyRandomization = false, LobOverrides overrides = null)
         {
+            var projectile = overrides?.Projectile ?? Prefab;
             var from = overrides?.From ?? From;
             var to = overrides?.To ?? To;
             
-            var obj = Instantiate(Prefab, Container ?? to.parent);
+            var obj = Instantiate(projectile, Container ?? to.parent);
             obj.transform.position = from.position;
             if (ForceToUi)
                 obj.transform.CastIntoUi();

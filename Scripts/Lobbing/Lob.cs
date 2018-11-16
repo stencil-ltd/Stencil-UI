@@ -37,6 +37,8 @@ namespace Lobbing
     [Serializable]
     public class LobOverrides
     {
+        public GameObject Projectile;
+            
         public bool OverrideStyle;
         public LobStyle Style;
 
