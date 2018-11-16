@@ -8,7 +8,10 @@ namespace Scripts.Util
         public static IEnumerator Await(this Animator anim, float leadTime = 0f)
         {
             yield return null;
-            yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length + anim.GetCurrentAnimatorStateInfo(0).normalizedTime - leadTime);
+            var duration = anim.GetCurrentAnimatorStateInfo(0).length;
+            var norm = anim.GetCurrentAnimatorStateInfo(0).normalizedTime;
+            Debug.Log($"Animator awaiting {duration} - {leadTime} [norm: {norm}]");
+            yield return new WaitForSeconds(duration - leadTime);
         }
     }
 }

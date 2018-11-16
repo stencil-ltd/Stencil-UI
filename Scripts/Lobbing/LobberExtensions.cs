@@ -12,7 +12,14 @@ namespace Lobbing
             overrides = overrides ?? new LobOverrides();
             overrides.OnEachComplete += (sender, lob) => currency.Commit(lob.Amount);
             yield return Objects.StartCoroutine(lobber.LobMany(amount, overrides));
-            
+        }
+        
+        public static IEnumerator LobCurrencySingle(this Lobber lobber, Currency currency, long amount, LobOverrides overrides = null)
+        {
+            currency.Stage(amount).AndSave();
+            overrides = overrides ?? new LobOverrides();
+            overrides.OnEachComplete += (sender, lob) => currency.Commit(lob.Amount);
+            yield return Objects.StartCoroutine(lobber.LobSingle(amount, false, overrides));
         }
     }
 }

@@ -71,7 +71,8 @@ namespace Lobbing
             if (ForceToUi)
                 obj.transform.CastIntoUi();
             obj.transform.SetAsLastSibling();
-
+            obj.SetActive(true);
+            
             var style = Flight;
             if (overrides?.OverrideStyle ?? false)
                 style = overrides.Style;
