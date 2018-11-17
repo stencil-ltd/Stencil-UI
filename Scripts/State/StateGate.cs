@@ -38,8 +38,8 @@ namespace State
 
         private void OnDisable()
         {
-            if (RevertOnExit && RevertState != null)
-            {
+            if (RevertOnExit && RevertState != null && States.Contains(Machine.State))
+            { 
                 Machine.RequestState(RevertState.Value);   
                 RevertState = null;
             }
