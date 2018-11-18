@@ -16,8 +16,6 @@ namespace State
         [Header("Base")]
         [LabelOverride("Id")]
         public string Id;
-        
-        [Header("Class")]
         public string Name;
         
         public string GetId() => Id;

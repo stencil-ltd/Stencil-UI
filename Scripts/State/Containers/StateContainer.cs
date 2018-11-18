@@ -1,4 +1,5 @@
 using System;
+using Plugins.Util;
 using UnityEngine;
 using Util;
 
@@ -18,6 +19,9 @@ namespace State.Containers
         [SerializeField] 
         [LabelOverride("Current Value")]
         private T _value;
+        
+        [Header("Style")]
+        public Color Color;
 
         private T _previous;
 
@@ -43,6 +47,7 @@ namespace State.Containers
 
         public void Notify()
         {
+            Debug.Log($"<color={Color.LogString()}>{Id} -></color> {_value}");
             OnChange?.Invoke(this, new StateTransition<T>(_previous, _value));
         }
 
