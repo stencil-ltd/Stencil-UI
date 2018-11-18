@@ -5,13 +5,15 @@ using Util;
 
 namespace State.Containers
 {
-    public abstract class StateContainer<T> : StencilData, IStateHaver<T>
+    public abstract class StateContainer<T> : ScriptableObject, IStateHaver<T>
     {
         public const string CreateFolder = "State Containers/";
         
         public event EventHandler<StateTransition<T>> OnChange;
 
-        [Header("Values")]
+        [Header("Values")] 
+        public String Name;
+        
         [SerializeField]
         [LabelOverride("Initial Value")]
         private T _initialValue;
@@ -37,9 +39,8 @@ namespace State.Containers
             }
         }
 
-        protected override void OnEnable()
+        protected virtual void OnEnable()
         {
-            base.OnEnable();
             _value = _initialValue;
             _previous = _value;
             Notify();
@@ -47,7 +48,7 @@ namespace State.Containers
 
         public void Notify()
         {
-            Debug.Log($"<color={Color.LogString()}>{Id} -></color> {_value}");
+            Debug.Log($"<color={Color.LogString()}>{Name} -></color> {_value}");
             OnChange?.Invoke(this, new StateTransition<T>(_previous, _value));
         }
 
