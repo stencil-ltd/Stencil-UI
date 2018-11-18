@@ -13,11 +13,11 @@ namespace State
         private static Dictionary<string, StencilData> _idMap 
             = new Dictionary<string, StencilData>();
         
-        [Header("Base Data")]
-        [LabelOverride("Id?")]
+        [Header("Base")]
+        [LabelOverride("Id")]
         public string Id;
         
-        [Header("Class Data")]
+        [Header("Class")]
         public string Name;
         
         public string GetId() => Id;

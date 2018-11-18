@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Util;
 
 namespace State.Containers
 {
@@ -9,8 +10,16 @@ namespace State.Containers
         
         public event EventHandler<StateTransition<T>> OnChange;
 
+        [Header("Values")]
+        [SerializeField]
+        [LabelOverride("Initial Value")]
+        private T _initialValue;
+        
         [SerializeField] 
+        [LabelOverride("Current Value")]
         private T _value;
+
+        private T _previous;
 
         public T Value
         {
@@ -18,10 +27,23 @@ namespace State.Containers
             set
             {
                 if (Equals(_value, value)) return;
-                var old = _value;
+                _previous = _value;
                 _value = value;
-                OnChange?.Invoke(this, new StateTransition<T>(old, _value));
+                Notify();
             }
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            _value = _initialValue;
+            _previous = _value;
+            Notify();
+        }
+
+        public void Notify()
+        {
+            OnChange?.Invoke(this, new StateTransition<T>(_previous, _value));
         }
 
         protected virtual bool Equals(T oldValue, T newValue)

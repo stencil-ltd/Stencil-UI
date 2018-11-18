@@ -9,6 +9,7 @@ namespace State.Editor
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
+            GUILayout.FlexibleSpace();
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
             if (GUILayout.Button("Reload Ids"))
             {
