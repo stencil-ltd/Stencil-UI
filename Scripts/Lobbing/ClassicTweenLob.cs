@@ -12,8 +12,8 @@ namespace Lobbing
             var lt = LeanTween.moveLocal(obj, targetPos, lob.Style.Duration);
             if (lob.Style.Elastic)
             {
-                lt.setEaseInBack();
-                lt.setScale(0.5f);
+                lt.setEaseInBack()
+                    .setScale(lob.Style.Elasticity);
             }
             yield return new WaitForSeconds(lob.Style.Duration);
         }

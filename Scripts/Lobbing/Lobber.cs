@@ -66,11 +66,17 @@ namespace Lobbing
             var from = overrides?.From ?? From;
             var to = overrides?.To ?? To;
             
-            var obj = Instantiate(projectile, Container ?? to.parent);
+            var obj = Instantiate(projectile, Container ?? to.parent, true);
             obj.transform.position = from.position;
             if (ForceToUi)
                 obj.transform.CastIntoUi();
             obj.transform.SetAsLastSibling();
+            if (overrides != null)
+            {
+                var scale = obj.transform.localScale;
+                scale.Scale(overrides.InitialScale);
+                obj.transform.localScale = scale;
+            }
             obj.SetActive(true);
             
             var style = Flight;

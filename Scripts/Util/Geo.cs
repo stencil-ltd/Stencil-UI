@@ -15,7 +15,7 @@ namespace Util
             var success = Physics.Raycast(ray, out hit, float.MaxValue, mask);
             if (success)
                 transform.position = hit.point;
-            else Debug.LogWarning($"Failed to cast lob into UI layer.");
+            else Debug.LogError($"Failed to cast lob into UI layer.");
         }
         
         public static Rect ToScreenSpace(this RectTransform transform)

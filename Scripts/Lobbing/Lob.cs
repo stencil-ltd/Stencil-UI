@@ -10,6 +10,7 @@ namespace Lobbing
     {
         public float Duration = 0.4f;
         public bool Elastic = true;
+        public float Elasticity = 0.5f;
 
         public static LobStyle Standard => new LobStyle();
     }
@@ -45,13 +46,14 @@ namespace Lobbing
         public bool OverrideDivision;
         public LobDivision Division;
 
+        public Vector3 InitialScale = Vector3.one;
+
         public Transform From;
         public Transform To;
 
         [CanBeNull] public Action OnManyComplete;
-        
-        public event EventHandler<Lob> OnEachComplete;
+        [CanBeNull] public Action<Lob> OnEachComplete;
 
-        public void OnComplete(Lob lob) => OnEachComplete?.Invoke(null, lob);
+        public void OnComplete(Lob lob) => OnEachComplete?.Invoke(lob);
     }
 }
