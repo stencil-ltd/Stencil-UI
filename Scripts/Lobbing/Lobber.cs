@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.PerformanceData;
 using JetBrains.Annotations;
 using Standard.Audio;
 using UnityEngine;
