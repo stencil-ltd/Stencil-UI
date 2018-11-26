@@ -17,6 +17,10 @@ using Firebase;
 using Firebase.RemoteConfig;
 #endif
 
+#if !EXCLUDE_FACEBOOK
+using Facebook.Unity;
+#endif
+
 namespace Init
 {
     [ExecutionOrder(-100)]
@@ -24,6 +28,10 @@ namespace Init
     {
         public bool Started { get; private set; }
         public static bool FirebaseReady;
+
+        #if !EXCLUDE_FACEBOOK
+        public static event EventHandler OnFacebookInit;
+        #endif
         
         protected sealed override void Awake()
         {
@@ -45,8 +53,13 @@ namespace Init
         private static void SetupFacebook()
         {
 #if !EXCLUDE_FACEBOOK
-            Facebook.Unity.FB.Mobile.FetchDeferredAppLinkData();
-            Facebook.Unity.FB.Init();
+            FB.Mobile.FetchDeferredAppLinkData();
+            FB.Init(() =>
+            {
+                Debug.Log($"Facebook init: {FB.IsInitialized} [authed={FB.IsLoggedIn}]");
+                FB.ActivateApp();
+                OnFacebookInit?.Invoke();
+            });
 #endif
         }
 
