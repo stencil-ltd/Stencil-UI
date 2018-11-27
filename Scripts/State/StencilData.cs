@@ -43,6 +43,10 @@ namespace State
             return _idMap[id];
         }
 
+        [CanBeNull]
+        public static T Find<T>(string id) where T : StencilData
+            => Find(id) as T;
+
         protected virtual void OnEnable()
         {
             ReloadId();

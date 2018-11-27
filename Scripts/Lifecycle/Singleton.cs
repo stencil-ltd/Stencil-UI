@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Game.Model;
 using Lifecycle;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -46,6 +47,11 @@ namespace Util
         }
         
         protected virtual void OnFirstLoad()
-        {}        
+        {}
+        
+        protected static T1[] LoadItems<T1>() where T1 : ScriptableObject
+        {
+            return Resources.FindObjectsOfTypeAll<T1>().ToArray();
+        }
     }
 }
