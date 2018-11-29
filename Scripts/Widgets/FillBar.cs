@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,6 +19,7 @@ namespace Widgets
         public string textFormat = "{0}";
         public float smoothing = 5f;
 
+        [CanBeNull] public string ForceText { get; private set; }
         public float CurrentAmount { get; private set; }
         public float CurrentNorm => Mathf.Clamp(CurrentAmount / max, 0, 1);
         
