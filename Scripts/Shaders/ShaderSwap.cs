@@ -10,18 +10,18 @@ namespace Shaders
         private Shader _orig;
 
         [Bind] 
-        private MeshRenderer _render;
+        public MeshRenderer Renderer { get; private set; }
 
         public bool Swapped
         {
-            get { return _render.material.shader != _orig; }
-            set { _render.material.shader = value ? swap : _orig; }
+            get { return Renderer.material.shader != _orig; }
+            set { Renderer.material.shader = value ? swap : _orig; }
         }
 
         private void Awake()
         {
             this.Bind();
-            _orig = _render.material.shader;
+            _orig = Renderer.material.shader;
         }
     }
 }
