@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using Scripts.Maths;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +10,7 @@ namespace Widgets
         [Header("Data")]
         public float amount = 0.5f;
         public float max = 1f;
-        
+
         [Header("UI")]
         public Image fill;
         [CanBeNull] public Text text;
@@ -17,11 +18,21 @@ namespace Widgets
         [Header("Config")] 
         public string textFormat = "{0}";
         public float smoothing = 5f;
+        public float minNorm = 0f; 
+        public bool logScale;
 
         [CanBeNull] public string forceText;
         public float CurrentAmount { get; private set; }
-        public float CurrentNorm => Mathf.Clamp(CurrentAmount / max, 0, 1);
-        
+        public float CurrentNorm
+        {
+            get
+            {
+                var retval = Mathf.Clamp(CurrentAmount / max, minNorm, 1);
+                if (logScale) retval = MathHelpers.LogNorm(retval);
+                return retval;
+            }
+        }
+
         private void Awake()
         {
             CurrentAmount = amount;

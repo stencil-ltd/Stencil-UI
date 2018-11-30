@@ -113,6 +113,7 @@ namespace Plugins.UI
 
         private void SetScrim(bool top)
         {
+            if (Scrim == null) return;
             var height = _bannerHeight;
             height += top ? TopSafePadding : BottomSafePadding;
             Scrim?.SetInsetAndSizeFromParentEdge(top ? RectTransform.Edge.Top : RectTransform.Edge.Bottom, 0, height);
@@ -132,6 +133,7 @@ namespace Plugins.UI
 
         public void SetBannerHeight(float pixelHeight, bool top)
         {
+            if (Scrim == null) return;
             var ratio = 1f;
             if (Application.isEditor) 
                 ratio = 2f;
