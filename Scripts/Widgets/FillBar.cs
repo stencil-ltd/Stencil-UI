@@ -42,8 +42,9 @@ namespace Widgets
                 text.text = string.Format(textFormat, amount);
         }
 
-        public void SetAmount(float amount) => SetAmounts(amount, max);
-        public void SetAmounts(float amount, float max)
+        public void SetAmount(float amount) => SetAmount
+            (amount, max);
+        public void SetAmount(float amount, float max)
         {
             this.amount = CurrentAmount = amount;
             this.max = max;
