@@ -9,6 +9,7 @@ namespace Widgets
     {
         [Header("Data")]
         public float amount = 0.5f;
+        public float min = 0f;
         public float max = 1f;
 
         [Header("UI")]
@@ -18,8 +19,7 @@ namespace Widgets
         [Header("Config")] 
         public string textFormat = "{0}";
         public float smoothing = 5f;
-        public float minNorm = 0f; 
-        public bool logScale;
+        public AnimationCurve normCurve = AnimationCurve.Linear(0, 0, 1, 1);
 
         [CanBeNull] public string forceText;
         public float CurrentAmount { get; private set; }
@@ -27,8 +27,8 @@ namespace Widgets
         {
             get
             {
-                var retval = Mathf.Clamp(CurrentAmount / max, minNorm, 1);
-                if (logScale) retval = MathHelpers.LogNorm(retval);
+                var retval = Mathf.Clamp((CurrentAmount - min) / (max - min), 0, 1);
+                retval = normCurve.Evaluate(retval);
                 return retval;
             }
         }
@@ -65,10 +65,12 @@ namespace Widgets
         }
 
         public void SetAmount(float amount) => SetAmount(amount, max);
-        public void SetAmount(float amount, float max)
+        public void SetAmount(float amount, float max) => SetAmount(amount, max, min);
+        public void SetAmount(float amount, float max, float min)
         {
             this.amount = CurrentAmount = amount;
             this.max = max;
+            this.min = min;
         }
 
         public void ForceTextValue([CanBeNull] string text)
