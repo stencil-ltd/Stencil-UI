@@ -11,9 +11,8 @@ namespace Widgets
         public float max = 1f;
         
         [Header("UI")]
-        public Image track;
         public Image fill;
-        public Text text;
+        [CanBeNull] public Text text;
 
         [Header("Config")] 
         public string textFormat = "{0}";
@@ -31,19 +30,30 @@ namespace Widgets
         private void Update()
         {
             if (!enabled) return;
+            UpdateFill();
+            UpdateText();
+        }
+
+        private void UpdateFill()
+        {
             var smooth = Application.isPlaying ? Time.deltaTime * smoothing : 1f;
             CurrentAmount = Mathf.Lerp(CurrentAmount, amount, smooth);
             var norm = CurrentNorm;
             fill.fillAmount = norm;
-            
-            if (!string.IsNullOrEmpty(forceText))
-                text.text = forceText;
-            else 
-                text.text = string.Format(textFormat, amount);
         }
 
-        public void SetAmount(float amount) => SetAmount
-            (amount, max);
+        private void UpdateText()
+        {
+            if (text != null)
+            {
+                if (!string.IsNullOrEmpty(forceText))
+                    text.text = forceText;
+                else
+                    text.text = string.Format(textFormat, amount);
+            }
+        }
+
+        public void SetAmount(float amount) => SetAmount(amount, max);
         public void SetAmount(float amount, float max)
         {
             this.amount = CurrentAmount = amount;
