@@ -48,10 +48,5 @@ namespace Util
         
         protected virtual void OnFirstLoad()
         {}
-        
-        protected static T1[] LoadItems<T1>() where T1 : ScriptableObject
-        {
-            return Resources.FindObjectsOfTypeAll<T1>().ToArray();
-        }
     }
 }
