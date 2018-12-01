@@ -48,6 +48,7 @@ namespace Init
             OnInit();
             SetupFirebase();
             SetupFacebook();
+            StencilAds.Init();
         }
 
         private static void SetupFacebook()
@@ -120,7 +121,6 @@ namespace Init
         protected virtual IEnumerator Start()
         {
             Started = true;
-            StencilAds.Init();
             OnSettled();
             yield break;
         }
