@@ -12,9 +12,10 @@ namespace Shaders
         [Bind] 
         public MeshRenderer Renderer { get; private set; }
 
+        public Shader CurrentShader => Renderer.material.shader;
         public bool Swapped
         {
-            get { return Renderer.material.shader != _orig; }
+            get { return CurrentShader != _orig; }
             set { Renderer.material.shader = value ? swap : _orig; }
         }
 
