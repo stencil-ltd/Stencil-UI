@@ -62,7 +62,7 @@ namespace Widgets
 
         private void UpdateText()
         {
-            if (text != null)
+            if ((object) text != null)
             {
                 if (!string.IsNullOrEmpty(forceText))
                     text.text = forceText;
