@@ -1,3 +1,4 @@
+using System;
 using JetBrains.Annotations;
 using Scripts.Maths;
 using UnityEngine;
@@ -19,6 +20,7 @@ namespace Widgets
         [Header("Config")] 
         public string textFormat = "{0}";
         public float smoothing = 5f;
+        public int segments = 0;
         public AnimationCurve normCurve = AnimationCurve.Linear(0, 0, 1, 1);
 
         [CanBeNull] public string forceText;
@@ -50,6 +52,11 @@ namespace Widgets
             var smooth = Application.isPlaying ? Time.deltaTime * smoothing : 1f;
             CurrentAmount = Mathf.Lerp(CurrentAmount, amount, smooth);
             var norm = CurrentNorm;
+            if (segments > 0)
+            {
+                var small = (int) (norm * segments);
+                norm = (float) small / segments;
+            }
             fill.fillAmount = norm;
         }
 
