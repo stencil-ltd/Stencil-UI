@@ -78,11 +78,14 @@ namespace Widgets
             this.amount = CurrentAmount = amount;
             this.max = max;
             this.min = min;
+            UpdateFill();
+            UpdateText();
         }
 
         public void ForceTextValue([CanBeNull] string text)
         {
             forceText = text;
+            UpdateText();
         }
     }
 }
