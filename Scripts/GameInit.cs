@@ -3,7 +3,6 @@ using System.Collections;
 using Ads;
 using Analytics;
 using CustomOrder;
-using Dev;
 using Plugins.UI;
 using Scripts.RemoteConfig;
 using Store;
@@ -15,6 +14,7 @@ using Util;
 #if !EXCLUDE_FIREBASE
 using Firebase;
 using Firebase.RemoteConfig;
+using Firebase.Messaging;
 #endif
 
 #if !EXCLUDE_FACEBOOK
@@ -94,11 +94,24 @@ namespace Init
                             Objects.Enqueue(StencilRemote.NotifyRemoteConfig);
                         });
                     }
+                    SetupPush();
                     OnFirebase(success);
                 });
             });
 #endif
         }
+        
+
+#if !EXCLUDE_FIREBASE
+        private void SetupPush()
+        {
+            FirebaseMessaging.RequestPermissionAsync();
+            if (StencilRemote.IsDeveloper())
+                FirebaseMessaging.SubscribeAsync("dev/remote");
+            else 
+                FirebaseMessaging.UnsubscribeAsync("dev/remote");
+        }
+#endif
 
         private void _OnNewScene(Scene arg0, LoadSceneMode arg1)
         {
