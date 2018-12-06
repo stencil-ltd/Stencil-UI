@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Plugins.Util;
 using UnityEngine;
 using Util;
@@ -39,11 +40,14 @@ namespace State
     
     public abstract class StateMachine<T> : Singleton<StateMachine<T>>, IStateMachine where T : struct
     {
+        public readonly List<T> History = new List<T>();
+        
         public Color Color;
 
         public T InitialState;
         public T State;
-    
+
+        public bool KeepHistory;
         public readonly string Name = typeof(T).ShortName();
     
         public event EventHandler<StateChange<T>> OnChange;
@@ -63,11 +67,24 @@ namespace State
                 ResetState();
         }
 
+        public T? PopState()
+        {
+            if (!KeepHistory) throw new Exception("Need history enabled!");
+            var index = History.Count - 1;
+            if (index < 0) return null;
+            var retval = History[index];
+            History.RemoveAt(index);
+            var ping = History.Count > 0 ? History.Last() : InitialState;
+            _SetState(ping);
+            return retval;
+        }
+
         public void ResetState()
         {
             var color = Color;
             Debug.Log($"<color={color.LogString()}>{GetType().ShortName()}</color>: Reset");
             RequestState(InitialState, true);
+            History.Clear();
         }
 
         public void Click_RequestState(T state)
@@ -78,9 +95,15 @@ namespace State
         public void RequestState(T state, bool force = false, bool notify = true)
         {
             if (!force && state.Equals(State)) return;
+            if (KeepHistory) History.Add(state);
+            _SetState(state, notify);
+        }
+
+        private void _SetState(T state, bool notify = true)
+        {
             var old = State;
             State = state;
-            if (notify) Objects.OnMain(() => NotifyChanged(old)); 
+            if (notify) Objects.OnMain(() => NotifyChanged(old));
         }
 
         void NotifyChanged(T old)
