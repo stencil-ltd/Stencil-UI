@@ -10,7 +10,7 @@ namespace State
         public bool AndDestroy;
         public bool RevertOnExit;
         public bool TakeStateOnActive;
-        public StateType[] States;
+        public StateType[] States = { default(StateType) };
 
         public StateMachine<StateType> Machine;
         public StateType State => Machine.State;
