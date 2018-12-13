@@ -10,6 +10,7 @@ namespace State
         [Header("Config")] 
         public T state;
         public bool popStateInstead;
+        public bool replaceHistory;
         
         private StateMachine<T> _machine;
 
@@ -21,7 +22,7 @@ namespace State
                 if (popStateInstead)
                     _machine.PopState();
                 else 
-                    _machine.RequestState(state);
+                    _machine.RequestState(state, replaceHistory: replaceHistory);
             });
         }
     }

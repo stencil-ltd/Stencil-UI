@@ -92,10 +92,15 @@ namespace State
             RequestState(state);
         }
 
-        public void RequestState(T state, bool force = false, bool notify = true)
+        public void RequestState(T state, bool force = false, bool notify = true, bool replaceHistory = false)
         {
             if (!force && state.Equals(State)) return;
-            if (KeepHistory) History.Add(state);
+            if (KeepHistory)
+            {
+                if (replaceHistory && History.Count > 0)
+                    History.RemoveAt(History.Count - 1);
+                History.Add(state);
+            }
             _SetState(state, notify);
         }
 
