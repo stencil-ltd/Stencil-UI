@@ -8,7 +8,13 @@ namespace State
 
         private void OnEnable()
         {
-            StateMachines.Get<T>().RequestState(state);
+            Invoke(nameof(_Check), 0.1f);
+        }
+
+        private void _Check()
+        {
+            if (gameObject.activeInHierarchy)
+                StateMachines.Get<T>().RequestState(state);            
         }
     }
 }
