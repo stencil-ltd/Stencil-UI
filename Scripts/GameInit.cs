@@ -26,6 +26,8 @@ namespace Init
     [ExecutionOrder(-100)]
     public class GameInit : Permanent<GameInit>
     {
+        public bool useLocation = true;
+        
         public bool Started { get; private set; }
         public static bool FirebaseReady;
 
@@ -46,9 +48,18 @@ namespace Init
             BuyableManager.Init();
             SceneManager.sceneLoaded += _OnNewScene;
             OnInit();
+            StartCoroutine(SetupLocation());
             SetupFirebase();
             SetupFacebook();
             StencilAds.Init();
+        }
+
+        private IEnumerator SetupLocation()
+        {
+            if (!useLocation) yield break;
+            Input.location.Start();
+            yield return null;
+            Input.location.Stop();
         }
 
         private static void SetupFacebook()
