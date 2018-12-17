@@ -40,7 +40,6 @@ namespace State
     
     public abstract class StateMachine<T> : Singleton<StateMachine<T>>, IStateMachine where T : struct
     {
-        public readonly List<T> History = new List<T>();
         
         public Color Color;
 
@@ -48,15 +47,15 @@ namespace State
         public T State;
 
         public bool KeepHistory;
-        public readonly string Name = typeof(T).ShortName();
     
+        [NonSerialized]
+        public readonly List<T> History = new List<T>();
         public event EventHandler<StateChange<T>> OnChange;
         
         protected override void OnEnable()
         {
             base.OnEnable();
-//            if (!typeof(T).IsEnum)
-//                throw new Exception("StateMachine can only handle enums.");
+            History.Clear();
             StateMachines.Register(this);
         }
 
@@ -120,7 +119,7 @@ namespace State
 
         public override string ToString()
         {
-            return Name;
+            return GetType().ShortName();
         }
     }
 }
