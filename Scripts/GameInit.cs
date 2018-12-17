@@ -47,11 +47,11 @@ namespace Init
             new GameObject("Main Thread Dispatch").AddComponent<UnityMainThreadDispatcher>();
             BuyableManager.Init();
             SceneManager.sceneLoaded += _OnNewScene;
-            OnInit();
             StartCoroutine(SetupLocation());
             SetupFirebase();
             SetupFacebook();
             StencilAds.Init();
+            OnInit();
         }
 
         private IEnumerator SetupLocation()
