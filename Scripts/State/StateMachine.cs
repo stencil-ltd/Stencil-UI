@@ -40,7 +40,6 @@ namespace State
     
     public abstract class StateMachine<T> : Singleton<StateMachine<T>>, IStateMachine where T : struct
     {
-        
         public Color Color;
 
         public T InitialState;
@@ -51,6 +50,9 @@ namespace State
         [NonSerialized]
         public readonly List<T> History = new List<T>();
         public event EventHandler<StateChange<T>> OnChange;
+
+        [NonSerialized]
+        private int _locked;
         
         protected override void OnEnable()
         {
@@ -69,6 +71,7 @@ namespace State
         public T? PopState()
         {
             if (!KeepHistory) throw new Exception("Need history enabled!");
+            if (_locked > 0) return null;
             var index = History.Count - 1;
             if (index < 0) return null;
             var retval = History[index];
@@ -80,6 +83,7 @@ namespace State
 
         public void ResetState()
         {
+            if (_locked > 0) return;
             var color = Color;
             Debug.Log($"<color={color.LogString()}>{GetType().ShortName()}</color>: Reset");
             RequestState(InitialState, true);
@@ -94,6 +98,7 @@ namespace State
         public void RequestState(T state, bool force = false, bool notify = true, bool replaceHistory = false)
         {
             if (!force && state.Equals(State)) return;
+            if (!force && _locked > 0) return;
             if (KeepHistory)
             {
                 if (replaceHistory && History.Count > 0)
@@ -103,6 +108,16 @@ namespace State
             _SetState(state, notify);
         }
 
+        public void Lock()
+        {
+            _locked++;
+        }
+
+        public void Unlock()
+        {
+            --_locked;
+        }
+        
         private void _SetState(T state, bool notify = true)
         {
             var old = State;
