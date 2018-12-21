@@ -9,8 +9,8 @@ namespace Scenic
 {
     public class LoadingScene : Controller<LoadingScene>
     {
-        [CanBeNull] 
-        private static string _load;
+        private static int _requestIndex = -1;
+        private static bool _preventActivation;
         
         public float loadTime = 5f;
         
@@ -21,9 +21,15 @@ namespace Scenic
         private int _nextScene = -1;
         private AsyncOperation _scene;
 
-        public static void Load(string name)
+        public static void Load(string name, bool preventActivation)
         {
-            _load = name;
+            Load(SceneManager.GetSceneByName(name).buildIndex, preventActivation);
+        }
+
+        public static void Load(int buildIndex, bool preventActivation)
+        {
+            _preventActivation = preventActivation;
+            _requestIndex = buildIndex;
             for (var i = 0; i < SceneManager.sceneCount; i++) 
                 SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(i));
             SceneManager.LoadScene(0);
@@ -33,11 +39,10 @@ namespace Scenic
         {
             base.Register();
             _myIndex = SceneManager.GetActiveScene().buildIndex;
-            if (!string.IsNullOrEmpty(_load)) 
-                _nextScene = SceneManager.GetSceneByName(_load).buildIndex;
+            _nextScene = _requestIndex;
             if (_nextScene < 0) 
                 _nextScene = _myIndex + 1;
-            _load = null;
+            _requestIndex = -1;
         }
 
         private IEnumerator Start()
@@ -46,7 +51,10 @@ namespace Scenic
             OnLoading?.Invoke(this, IsLoading);
             yield return null;
             _scene = SceneManager.LoadSceneAsync(_nextScene, LoadSceneMode.Additive);
+            if (_preventActivation)
+                _scene.allowSceneActivation = false;
             yield return new WaitForSeconds(loadTime);
+            _scene.allowSceneActivation = true;
             if (_scene.isDone)
                 StartCoroutine(GameReady());
             else
