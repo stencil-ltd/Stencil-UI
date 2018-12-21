@@ -17,7 +17,8 @@ namespace Standard.States
             Options,
             CrateOpen, 
             CratePurchase,
-            NeedCash
+            NeedCash,
+            Dead
         }   
     }
 }
