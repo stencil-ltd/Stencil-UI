@@ -11,7 +11,11 @@ namespace Standard.Audio
 
         private void Awake()
         {
-            GetComponent<Button>().onClick.AddListener(() => sfx.Play());
+            GetComponent<Button>().onClick.AddListener(call: () =>
+            {
+                if (sfx != null)
+                    sfx.Play();
+            });
         }
     }
 }
