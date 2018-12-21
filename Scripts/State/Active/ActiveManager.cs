@@ -50,11 +50,13 @@ namespace State.Active
             if (!Application.isPlaying && !ActiveInEditor) return;
             if (Gates.Count == 0) return;
             var active = Op == Operation.And;
+            var hasActive = false;
             foreach(var g in Gates) 
             {
                 if (!g.enabled) continue;
                 var check = g.Check();
                 if (check == null) continue;
+                hasActive = true;
                 switch(Op)
                 {
                     case Operation.And:
@@ -65,7 +67,8 @@ namespace State.Active
                         break;
                 }
             }
-            Objects.StartCoroutine(SetActiveInternal(active));
+            if (hasActive)
+                Objects.StartCoroutine(SetActiveInternal(active));
         }
 
         private IEnumerator SetActiveInternal(bool active)
