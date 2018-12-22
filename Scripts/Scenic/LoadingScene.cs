@@ -30,9 +30,7 @@ namespace Scenic
         {
             _preventActivation = preventActivation;
             _requestIndex = buildIndex;
-            for (var i = 0; i < SceneManager.sceneCount; i++) 
-                SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(i));
-            SceneManager.LoadScene(0);
+            SceneManager.LoadSceneAsync(0);
         }
         
         public override void Register()
@@ -50,9 +48,14 @@ namespace Scenic
             IsLoading = true;
             OnLoading?.Invoke(this, IsLoading);
             yield return null;
+            for (var i = 0; i < SceneManager.sceneCount; i++)
+            {
+                if (i == _myIndex) continue;
+                SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(i));
+                yield return null;
+            }
             _scene = SceneManager.LoadSceneAsync(_nextScene, LoadSceneMode.Additive);
-            if (_preventActivation)
-                _scene.allowSceneActivation = false;
+            if (_preventActivation) _scene.allowSceneActivation = false;
             yield return new WaitForSeconds(loadTime);
             _scene.allowSceneActivation = true;
             if (_scene.isDone)
