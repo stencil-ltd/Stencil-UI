@@ -21,7 +21,7 @@ namespace Texts
             _elapsed += Time.deltaTime;
             var elapsedInt = (int) _elapsed;
             var sub = (int) ((_elapsed - elapsedInt) * 100);
-            _text.text = $"{elapsedInt}:{sub:D2}";
+            _text.text = $"{elapsedInt:D2}:{sub:D2}";
         }
     }
 }
