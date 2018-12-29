@@ -9,7 +9,7 @@ namespace Texts
     {
         [Bind] private Text _text;
 
-        private double _elapsed;
+        public double elapsed { get; private set; }
 
         private void Awake()
         {
@@ -18,9 +18,9 @@ namespace Texts
 
         private void Update()
         {
-            _elapsed += Time.deltaTime;
-            var elapsedInt = (int) _elapsed;
-            var sub = (int) ((_elapsed - elapsedInt) * 100);
+            elapsed += Time.deltaTime;
+            var elapsedInt = (int) elapsed;
+            var sub = (int) ((elapsed - elapsedInt) * 100);
             _text.text = $"{elapsedInt:D2}:{sub:D2}";
         }
     }
