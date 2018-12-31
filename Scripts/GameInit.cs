@@ -104,8 +104,8 @@ namespace Init
                             FirebaseRemoteConfig.ActivateFetched();
                             Objects.Enqueue(StencilRemote.NotifyRemoteConfig);
                         });
+                        SetupPush();
                     }
-                    SetupPush();
                     OnFirebase(success);
                 });
             });
