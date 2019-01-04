@@ -1,5 +1,6 @@
 ﻿using JetBrains.Annotations;
 using UI;
+using UnityEditor.U2D;
 using UnityEngine;
 
 namespace Standard.Audio
@@ -21,9 +22,20 @@ namespace Standard.Audio
         {
             if (!Enabled) return;
             if (clip == null) return;
+            AcquireSource().PlayOneShot(clip);
+        }
+
+        private AudioSource AcquireSource()
+        {
             var source = _sources[_index];
-            source.PlayOneShot(clip);
             _index = (_index + 1) % _sources.Length;
+            return source;
+        }
+
+        public void Play(SmartSfx sfx)
+        {
+            var source = AcquireSource();
+            source.outputAudioMixerGroup = sfx.MixerGroup();
         }
     }
 }
