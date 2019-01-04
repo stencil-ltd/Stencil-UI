@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Unity
 {
+    [DisallowMultipleComponent]
     public class TimeScale : MonoBehaviour
     {
         public float scale = 1f;
