@@ -12,11 +12,13 @@ namespace Unity
         {
             _scale = Time.timeScale;
             Time.timeScale = scale;
+            Debug.Log($"Setting timeScale to {Time.timeScale}");
         }
 
         private void OnDisable()
         {
             Time.timeScale = _scale;
+            Debug.Log($"Setting timeScale to {Time.timeScale}");
         }
     }
 }
