@@ -25,9 +25,7 @@ namespace Init
 {
     [ExecutionOrder(-100)]
     public class GameInit : Permanent<GameInit>
-    {
-        public bool useLocation = true;
-        
+    {   
         public bool Started { get; private set; }
         public static bool FirebaseReady;
 
@@ -56,7 +54,9 @@ namespace Init
 
         private IEnumerator SetupLocation()
         {
-            if (!useLocation) yield break;
+            #if !STENCIL_LOCATION
+            yield break;
+            #endif
             Input.location.Start();
             yield return null;
             Input.location.Stop();
