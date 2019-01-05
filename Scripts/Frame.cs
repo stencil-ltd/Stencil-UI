@@ -52,7 +52,6 @@ namespace Plugins.UI
         {
             Instance = this;
             this.Bind();
-            eventSystem = EventSystem.current;
             var safe = SafeArea;
             TopSafePadding = Screen.height - safe.yMax;
             BottomSafePadding = safe.yMin;
@@ -64,7 +63,7 @@ namespace Plugins.UI
                     BottomSafePadding = DebugNotchBottom;
             }
 
-            if (BottomSafePadding >= 1f)
+            if (BottomSafePadding >= 1f && AdSettings.Instance != null)
                 BottomSafePadding += AdSettings.Instance.NudgeBottomSafeZone;
             
             _scaler = GetComponentInParent<CanvasScaler>();
@@ -73,6 +72,7 @@ namespace Plugins.UI
 
         void Start()
         {
+            eventSystem = EventSystem.current;
             if (_bannerHeight <= 1f) SetBannerHeight(0f, true);
             StencilAds.OnBannerChange += OnBanner;
             OnBanner(null, null);
