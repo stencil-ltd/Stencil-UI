@@ -133,18 +133,19 @@ namespace Plugins.UI
 
         public void SetBannerHeight(float pixelHeight, bool top)
         {
-            if (Scrim == null) return;
-            var ratio = 1f;
-            if (Application.isEditor) 
-                ratio = 2f;
-            else if (StencilAds.BannerNeedsScale)
-                ratio = FinalScale;
-            
-            _bannerHeight = pixelHeight * ratio;
+            if (Scrim != null)
+            {
+                var ratio = 1f;
+                if (Application.isEditor) 
+                    ratio = 2f;
+                else if (StencilAds.BannerNeedsScale)
+                    ratio = FinalScale;
+                _bannerHeight = pixelHeight * ratio;
+                Debug.Log($"Setting banner height to {_bannerHeight} ({pixelHeight} x {ratio:N2})");
+                Scrim?.gameObject.SetActive(pixelHeight >= 1f);
+            }
             SetScrim(top);
             SetContents(top);
-            Debug.Log($"Setting banner height to {_bannerHeight} ({pixelHeight} x {ratio:N2})");
-            Scrim?.gameObject.SetActive(pixelHeight >= 1f);
         }
 
         private void _SetLocked(bool locked)
