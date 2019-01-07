@@ -19,13 +19,13 @@ namespace Lobbing
     public struct Lob
     {
         public readonly string Id;
-        public readonly long Amount;
+        public readonly ulong Amount;
         public readonly LobStyle Style;
         public readonly GameObject Projectile;
         
         [CanBeNull] public readonly object Payload;
 
-        public Lob(GameObject projectile, long amount, [CanBeNull] LobStyle style = null, [CanBeNull] object payload = null)
+        public Lob(GameObject projectile, ulong amount, [CanBeNull] LobStyle style = null, [CanBeNull] object payload = null)
         {
             Id = Guid.NewGuid().ToString();
             Projectile = projectile;

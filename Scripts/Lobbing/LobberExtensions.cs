@@ -19,7 +19,7 @@ namespace Lobbing
             };
         }
         
-        public static IEnumerator LobCurrency(this Lobber lobber, Currency currency, long amount, LobOptions options = null)
+        public static IEnumerator LobCurrency(this Lobber lobber, Currency currency, ulong amount, LobOptions options = null)
         {
             if (options?.PreStaged != true)
                 currency.Stage(amount).AndSave();
@@ -34,7 +34,7 @@ namespace Lobbing
             yield return Objects.StartCoroutine(lobber.LobMany(amount, overrides));
         }
         
-        public static IEnumerator LobCurrencySingle(this Lobber lobber, Currency currency, long amount, LobOptions options = null)
+        public static IEnumerator LobCurrencySingle(this Lobber lobber, Currency currency, ulong amount, LobOptions options = null)
         {
             if (options?.PreStaged != true)
                 currency.Stage(amount).AndSave();

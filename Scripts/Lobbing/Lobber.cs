@@ -59,7 +59,7 @@ namespace Lobbing
 
         public ILobFunction Function = new ClassicTweenLob();
 
-        public IEnumerator LobSingle(long amount, bool applyRandomization = false, LobOverrides overrides = null)
+        public IEnumerator LobSingle(ulong amount, bool applyRandomization = false, LobOverrides overrides = null)
         {
             var projectile = overrides?.Projectile ?? Prefab;
             var from = overrides?.From ?? From;
@@ -97,7 +97,7 @@ namespace Lobbing
             End(lob, overrides);
         }
 
-        public IEnumerator LobMany(long amount, LobOverrides overrides = null)
+        public IEnumerator LobMany(ulong amount, LobOverrides overrides = null)
         {
             var from = overrides?.From ?? From;
             var to = overrides?.To ?? To;
@@ -117,16 +117,16 @@ namespace Lobbing
             
             while (remaining > 0L)
             {
-                long single;
+                ulong single;
                 if (division.ConcreteAmount)
                 {
-                    single = (long) (division.AmountPerLob + 
+                    single = (ulong) (division.AmountPerLob + 
                                      Random.Range(-division.RandomizeAmount, division.RandomizeAmount));
                 }
                 else
                 {
                     var div = division.AmountPerLob + Random.Range(-division.RandomizeAmount, division.RandomizeAmount);
-                    single = (long) (div * amount);
+                    single = (ulong) (div * amount);
                 }
                 if (single < 0) continue;
                 if (single < 1) single = 1; 
