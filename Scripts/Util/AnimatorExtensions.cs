@@ -5,6 +5,9 @@ namespace Scripts.Util
 {
     public static class AnimatorExtensions
     {
+        public static void Replay(this Animator anim, string state)
+            => anim.Play(state, 0, 0f);
+        
         public static IEnumerator Await(this Animator anim, float leadTime = 0f)
         {
             yield return null;
