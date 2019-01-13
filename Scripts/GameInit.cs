@@ -40,8 +40,6 @@ namespace Init
             Application.targetFrameRate = 60;
             Screen.orientation = ScreenOrientation.Portrait;
             var _ = Tracking.Instance;
-            gameObject.AddComponent<Gestures>();
-            gameObject.AddComponent<GestureReport>();
             new GameObject("Main Thread Dispatch").AddComponent<UnityMainThreadDispatcher>();
             BuyableManager.Init();
             SceneManager.sceneLoaded += _OnNewScene;
