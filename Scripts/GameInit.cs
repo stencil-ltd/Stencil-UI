@@ -119,6 +119,10 @@ namespace Init
                 FirebaseMessaging.SubscribeAsync("dev/remote");
             else 
                 FirebaseMessaging.UnsubscribeAsync("dev/remote");
+            FirebaseMessaging.TokenReceived += (sender, args) =>
+            {
+                Debug.Log($"Firebase/FCM Token: {args.Token}");    
+            };
         }
 #endif
 
@@ -129,7 +133,8 @@ namespace Init
         }
 
         protected virtual void OnFirebase(bool success)
-        {}
+        {
+        }
 
         protected virtual void OnInit()
         {}
