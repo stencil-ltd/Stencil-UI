@@ -125,6 +125,13 @@ namespace Init
             };
         }
 #endif
+        
+#if STENCIL_IRONSRC
+        private void OnApplicationPause(bool pauseStatus)
+        {
+            IronSource.Agent.onApplicationPause(pauseStatus);
+        }
+#endif
 
         private void _OnNewScene(Scene arg0, LoadSceneMode arg1)
         {
