@@ -43,7 +43,8 @@ namespace State.Active
         public override void Unregister()
         {
             base.Unregister();
-            foreach(var g in Gates) g.Unregister();            
+            foreach(var g in Gates) g.Unregister();
+            Registered = false;
         }
 
         public override void WillUnregister()
@@ -60,7 +61,7 @@ namespace State.Active
             var hasActive = false;
             foreach(var g in Gates) 
             {
-                if (!g.enabled) continue;
+                if (g == null || !g.enabled) continue;
                 var check = g.Check();
                 if (check == null) continue;
                 hasActive = true;
