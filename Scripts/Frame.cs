@@ -125,7 +125,7 @@ namespace Plugins.UI
             var hTop = TopSafePadding;
             if (top) hTop += _bannerHeight;
             var hBot = BottomSafePadding;
-            if (!top) hBot += _bannerHeight + BannerNudge;
+            if (!top) hBot += _bannerHeight == 0 ? 0 : _bannerHeight + BannerNudge;
             Debug.Log($"Set Contents {hTop}x{hBot}");
             Contents.offsetMax = new Vector2(0, -hTop);
             Contents.offsetMin = new Vector2(0, hBot);
