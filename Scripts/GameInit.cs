@@ -27,11 +27,11 @@ namespace Init
     public class GameInit : Permanent<GameInit>
     {   
         public bool Started { get; private set; }
+        
         public static bool FirebaseReady;
 
-        #if !EXCLUDE_FACEBOOK
         public static event EventHandler OnFacebookInit;
-        #endif
+        public static event EventHandler OnFirebaseInit;
         
         protected sealed override void Awake()
         {
@@ -103,6 +103,7 @@ namespace Init
                             Objects.Enqueue(StencilRemote.NotifyRemoteConfig);
                         });
                         SetupPush();
+                        OnFirebaseInit?.Invoke();
                     }
                     OnFirebase(success);
                 });
