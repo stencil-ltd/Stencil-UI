@@ -12,7 +12,12 @@ namespace State.Active
         {
             ActiveManager = manager;
         }
+
+        public virtual void DidRegister() {}
+
         public virtual void Unregister() {}
+
+        public virtual void WillUnregister() {}
 
         public void RequestCheck() => ActiveManager.Check();
     }

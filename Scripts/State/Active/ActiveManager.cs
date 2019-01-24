@@ -30,19 +30,26 @@ namespace State.Active
             if (Registered) return;
             if (!Application.isPlaying && !ActiveInEditor) return;
             Gates.AddRange(GetComponents<ActiveGate>());
-            foreach(var g in Gates)
-                g.Register(this);
+            foreach(var g in Gates) g.Register(this);
         }
 
         public override void DidRegister()
         {
+            base.DidRegister();
+            foreach(var g in Gates) g.DidRegister();
             Check();
         }
 
         public override void Unregister()
         {
-            foreach(var g in Gates)
-                g.Unregister();            
+            base.Unregister();
+            foreach(var g in Gates) g.Unregister();            
+        }
+
+        public override void WillUnregister()
+        {
+            foreach(var g in Gates) g.WillUnregister();    
+            base.WillUnregister();
         }
 
         public void Check() 
