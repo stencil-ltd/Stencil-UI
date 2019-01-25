@@ -9,40 +9,35 @@ namespace UI
 
         private void Awake()
         {
-            Instance = (T)this;
             AwakeCheck();
-            OnAwake();
+            if (Valid) OnAwake();
         }
 
-        private void OnEnable()
+        private void Start()
         {
-            Instance = (T)this;
+            if (Valid) OnStart();
         }
 
         public override void Register()
         {
-            Instance = (T)this;
             AwakeCheck();
         }
 
-        public override void Unregister()
+        private bool AwakeCheck()
         {
-            Instance = Instance == this ? null : Instance;
-        }
-
-        private void AwakeCheck()
-        {
-            if (Instance != null && Instance != this && Application.isPlaying)
+            if (Instance != null && Instance != this)
             {
                 Destroy(gameObject);
-                return;
+                return false;
             }
             Valid = true;
             Instance = (T) this;
-            if (Application.isPlaying) DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject);
+            return true;
         }
         
         protected virtual void OnAwake() {}
+        protected virtual void OnStart() {}
         
         protected virtual void OnDestroy()
         {

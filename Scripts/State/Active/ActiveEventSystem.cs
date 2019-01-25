@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Analytics;
 using CustomOrder;
 using UI;
 using UnityEditor;
 using UnityEngine;
+using Util;
+
 #if UNITY_EDITOR
 
 #endif
@@ -29,13 +32,19 @@ namespace State.Active
             _registers = _registers.Where(arg => !EditorUtility.IsPersistent(arg))
                 .ToArray();
 #endif
+
+            var registered = new List<RegisterableBehaviour>();
             if (Application.isPlaying)
             {
                 foreach (var res in _registers)
                 {
                     try
                     {
-                        res.Register();
+                        if (!res.Registered)
+                        {
+                            res.Register();
+                            registered.Add(res);
+                        }
                     }
                     catch (Exception e)
                     {
@@ -44,7 +53,7 @@ namespace State.Active
                     res.Registered = true;
                 }
 
-                foreach (var res in _registers)
+                foreach (var res in registered)
                 {
                     try
                     {
@@ -66,7 +75,8 @@ namespace State.Active
                 {
                     try
                     {
-                        res.WillUnregister();
+                        if (res.Registered && !res.IsPermanent())
+                            res.WillUnregister();
                     }
                     catch (Exception e)
                     {
@@ -77,7 +87,8 @@ namespace State.Active
                 {
                     try
                     {
-                        res.Unregister();
+                        if (res.Registered && !res.IsPermanent())
+                            res.Unregister();
                     }
                     catch (Exception e)
                     {
