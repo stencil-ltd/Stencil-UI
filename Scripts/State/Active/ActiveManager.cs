@@ -25,6 +25,22 @@ namespace State.Active
         public float FadeExitDuration;
         [CanBeNull] public string ExitTrigger;
 
+        public void RemoveAll(bool andDestroy = false)
+        {
+            Gates.Clear();
+            foreach (var activeGate in GetComponents<ActiveGate>())
+            {
+                Destroy(activeGate);
+            }
+            if (andDestroy) Destroy(this);
+        }
+
+        public void RemoveGate(ActiveGate gate)
+        {
+            Gates.Remove(gate);
+            Destroy(gate);
+        }
+
         public override void Register()
         {
             if (Registered) return;
