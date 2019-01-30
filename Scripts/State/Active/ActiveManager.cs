@@ -25,6 +25,11 @@ namespace State.Active
         public float FadeExitDuration;
         [CanBeNull] public string ExitTrigger;
 
+        private void Start()
+        {
+            // Get the enabled checkbox.
+        }
+
         public void RemoveAll(bool andDestroy = false)
         {
             Gates.Clear();
@@ -73,6 +78,7 @@ namespace State.Active
         {
             if (!Application.isPlaying && !ActiveInEditor) return;
             if (Gates.Count == 0) return;
+            if (!enabled) return;
             var active = Op == Operation.And;
             var hasActive = false;
             foreach(var g in Gates) 
