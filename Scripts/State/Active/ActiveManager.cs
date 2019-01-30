@@ -78,7 +78,7 @@ namespace State.Active
         {
             if (!Application.isPlaying && !ActiveInEditor) return;
             if (Gates.Count == 0) return;
-            if (!enabled) return;
+            if (this == null || !enabled) return;
             var active = Op == Operation.And;
             var hasActive = false;
             foreach(var g in Gates) 
