@@ -29,12 +29,14 @@ namespace Util
 
         protected virtual void OnEnable()
         {
-            SceneManager.sceneLoaded += OnSceneLoad;
+            if (Application.isPlaying)
+                SceneManager.sceneLoaded += OnSceneLoad;
         }
 
         protected virtual void OnDisable()
         {
-            SceneManager.sceneLoaded -= OnSceneLoad;
+            if (Application.isPlaying)
+                SceneManager.sceneLoaded -= OnSceneLoad;
         }
 
         protected virtual void OnSceneLoad(Scene arg0, LoadSceneMode loadSceneMode)
