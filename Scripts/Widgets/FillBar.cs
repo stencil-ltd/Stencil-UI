@@ -18,7 +18,7 @@ namespace Widgets
         [CanBeNull] public Text text;
 
         [Header("Config")] 
-        public string textFormat = "{0}";
+        public string textFormat = "{0}/{1}";
         public float smoothing = 5f;
         public int segments = 0;
         public AnimationCurve normCurve = AnimationCurve.Linear(0, 0, 1, 1);
@@ -67,7 +67,7 @@ namespace Widgets
                 if (!string.IsNullOrEmpty(forceText))
                     text.text = forceText;
                 else
-                    text.text = string.Format(textFormat, amount);
+                    text.text = string.Format(textFormat, amount, max);
             }
         }
 
