@@ -16,6 +16,7 @@ namespace Widgets
         [Header("UI")]
         public Image fill;
         [CanBeNull] public Text text;
+        public Image[] extraFills = {};
 
         [Header("Config")] 
         public string textFormat = "{0}/{1}";
@@ -58,6 +59,8 @@ namespace Widgets
                 norm = (float) small / segments;
             }
             fill.fillAmount = norm;
+            foreach (var extraFill in extraFills) 
+                extraFill.fillAmount = norm;
         }
 
         private void UpdateText()
