@@ -6,9 +6,11 @@ namespace UI
     [RequireComponent(typeof(Gestures))]
     public class GestureReport : MonoBehaviour
     {
+        public int logSize = 1024;
+        
         private void Awake()
         {
-            LogCollector.Init();
+            LogCollector.Init(logSize);
             GetComponent<Gestures>().OnGesture += (sender, args) => Report();
         }
         
