@@ -86,6 +86,7 @@ namespace Init
 
                 Objects.Enqueue(() =>
                 {
+                    Debug.Log($"Firebase Configuration: {success}");
                     if (success)
                     {
                         var settings = FirebaseRemoteConfig.Settings;
