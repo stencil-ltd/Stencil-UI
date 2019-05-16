@@ -30,6 +30,15 @@ namespace State
             Machine.OnChange -= Changed;
         }
 
+        public void Revert()
+        {
+            if (RevertState != null && States.Contains(Machine.State))
+            {
+                Machine.RequestState(RevertState.Value);   
+                RevertState = null;
+            }
+        }
+
         private void OnEnable()
         {
             if (TakeStateOnActive)
@@ -38,11 +47,7 @@ namespace State
 
         private void OnDisable()
         {
-            if (RevertOnExit && RevertState != null && States.Contains(Machine.State))
-            { 
-                Machine.RequestState(RevertState.Value);   
-                RevertState = null;
-            }
+            if (RevertOnExit) Revert();
         }
 
         public override bool? Check()
