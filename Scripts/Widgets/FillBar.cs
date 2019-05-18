@@ -2,7 +2,9 @@ using System;
 using JetBrains.Annotations;
 using Scripts.Maths;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
+using Util;
 
 namespace Widgets
 {
@@ -17,12 +19,15 @@ namespace Widgets
         public Image fill;
         [CanBeNull] public Text text;
         public Image[] extraFills = {};
+        public UnityEvent onFinish;
 
         [Header("Config")] 
         public string textFormat = "{0}/{1}";
         public float smoothing = 5f;
         public int segments = 0;
         public AnimationCurve normCurve = AnimationCurve.Linear(0, 0, 1, 1);
+
+        private bool _active;
 
         [CanBeNull] public string forceText;
         public float CurrentAmount { get; private set; }
@@ -43,7 +48,7 @@ namespace Widgets
         
         private void Update()
         {
-            if (!enabled) return;
+            if (!enabled || !_active) return;
             UpdateFill();
             UpdateText();
         }
@@ -61,6 +66,11 @@ namespace Widgets
             fill.fillAmount = norm;
             foreach (var extraFill in extraFills) 
                 extraFill.fillAmount = norm;
+            if (norm >= 1f)
+            {
+                _active = false;
+                onFinish?.Invoke();
+            }
         }
 
         private void UpdateText()
@@ -78,6 +88,7 @@ namespace Widgets
         public void SetAmount(float amount, float max) => SetAmount(amount, max, min);
         public void SetAmount(float amount, float max, float min)
         {
+            _active = true;
             this.amount = CurrentAmount = amount;
             this.max = max;
             this.min = min;
