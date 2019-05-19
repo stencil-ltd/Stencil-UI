@@ -1,6 +1,7 @@
 using System;
 using JetBrains.Annotations;
 using Scripts.Maths;
+using StencilEvents;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -16,10 +17,9 @@ namespace Widgets
         public float max = 1f;
 
         [Header("UI")]
-        public Image fill;
+        public Image[] fills;
         [CanBeNull] public Text text;
-        public Image[] extraFills = {};
-        public UnityEvent onFinish;
+        public FloatEvent onFinished;
 
         [Header("Config")] 
         public string textFormat = "{0}/{1}";
@@ -27,7 +27,12 @@ namespace Widgets
         public int segments = 0;
         public AnimationCurve normCurve = AnimationCurve.Linear(0, 0, 1, 1);
 
-        private bool _active;
+        public bool IsAnimating => !IsPaused && !IsFinished;
+        public bool IsPaused { get; private set; }
+       
+        public bool IsFinished => CurrentAmount.IsAbout(amount); 
+
+        private float _lastTier = 0;
 
         [CanBeNull] public string forceText;
         public float CurrentAmount { get; private set; }
@@ -48,7 +53,7 @@ namespace Widgets
         
         private void Update()
         {
-            if (!enabled || !_active) return;
+            if (!enabled || !IsAnimating) return;
             UpdateFill();
             UpdateText();
         }
@@ -63,13 +68,17 @@ namespace Widgets
                 var small = (int) (norm * segments);
                 norm = (float) small / segments;
             }
-            fill.fillAmount = norm;
-            foreach (var extraFill in extraFills) 
-                extraFill.fillAmount = norm;
-            if (norm >= 1f)
+            SetNorm(norm);
+        }
+
+        private void SetNorm(float norm)
+        {
+            foreach (var fill in fills) fill.fillAmount = norm;
+            if (IsFinished)
             {
-                _active = false;
-                onFinish?.Invoke();
+                Debug.Log($"FillBar Finished ({(int)(norm * 100)}%)");
+                CurrentAmount = amount;
+                onFinished?.Invoke(amount);
             }
         }
 
@@ -88,7 +97,6 @@ namespace Widgets
         public void SetAmount(float amount, float max) => SetAmount(amount, max, min);
         public void SetAmount(float amount, float max, float min)
         {
-            _active = true;
             this.amount = CurrentAmount = amount;
             this.max = max;
             this.min = min;
