@@ -64,6 +64,12 @@ namespace Lobbing
             var projectile = overrides?.Projectile ?? Prefab;
             var from = overrides?.From ?? From;
             var to = overrides?.To ?? To;
+            if (overrides?.ReverseDirection == true)
+            {
+                var tmp = to;
+                to = from;
+                from = tmp;
+            }
             
             var obj = Instantiate(projectile, Container ?? to.parent, true);
             obj.transform.position = from.position;
@@ -101,6 +107,12 @@ namespace Lobbing
         {
             var from = overrides?.From ?? From;
             var to = overrides?.To ?? To;
+            if (overrides?.ReverseDirection == true)
+            {
+                var tmp = to;
+                to = from;
+                from = tmp;
+            }
 
             var routines = new List<Coroutine>();
             var remaining = amount;

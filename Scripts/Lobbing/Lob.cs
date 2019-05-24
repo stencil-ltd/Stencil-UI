@@ -48,6 +48,7 @@ namespace Lobbing
 
         public Vector3 InitialScale = Vector3.one;
 
+        public bool? ReverseDirection;
         public Transform From;
         public Transform To;
 
