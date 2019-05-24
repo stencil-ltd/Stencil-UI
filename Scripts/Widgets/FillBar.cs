@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using JetBrains.Annotations;
 using Scripts.Maths;
 using StencilEvents;
@@ -22,6 +23,7 @@ namespace Widgets
         public FloatEvent onFinished;
 
         [Header("Config")] 
+        public bool showPercent = false;
         public string textFormat = "{0}/{1}";
         public float smoothing = 5f;
         public int segments = 0;
@@ -53,7 +55,7 @@ namespace Widgets
         
         private void Update()
         {
-            if (!enabled || !IsAnimating) return;
+//            if (!enabled || !IsAnimating) return;
             UpdateFill();
             UpdateText();
         }
@@ -89,8 +91,18 @@ namespace Widgets
                 if (!string.IsNullOrEmpty(forceText))
                     text.text = forceText;
                 else
-                    text.text = string.Format(textFormat, amount, max);
+                {
+                    text.text = showPercent ? 
+                        string.Format(textFormat, Mathf.RoundToInt(CurrentNorm * 100)) : 
+                        string.Format(textFormat, amount, max);
+                }
             }
+        }
+
+        public IEnumerator Await()
+        {
+            while (IsAnimating)
+                yield return null;
         }
 
         public void SetAmount(float amount) => SetAmount(amount, max);
