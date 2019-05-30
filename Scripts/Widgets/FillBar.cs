@@ -77,10 +77,10 @@ namespace Widgets
 
         private void SetNorm(float norm)
         {
-            if (_norm == norm) return;
+            var changed = _norm != norm;
             _norm = norm;
             foreach (var fill in fills) fill.fillAmount = norm;
-            if (IsFinished)
+            if (changed && IsFinished)
             {
 //                Debug.Log($"FillBar Finished ({(int)(norm * 100)}%)");
                 CurrentAmount = amount;
