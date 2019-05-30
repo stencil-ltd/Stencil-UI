@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
@@ -24,6 +25,9 @@ namespace State.Active
         [Header("Transitions")] 
         public float FadeExitDuration;
         [CanBeNull] public string ExitTrigger;
+        
+        [Header("Debug")]
+        public bool Logging = false;
 
         private void Start()
         {
@@ -120,7 +124,14 @@ namespace State.Active
                         FadeExitDuration));
                 }
             }
+            MaybeLog($"SetActiveInternal set active {active}");
             gameObject.SetActive(active);
+        }
+
+        private void MaybeLog(String message)
+        {
+            if (Logging) 
+                Debug.Log($"[{name}]ActiveManager - {message}");
         }
     }
 }

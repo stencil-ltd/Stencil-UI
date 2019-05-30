@@ -48,6 +48,8 @@ namespace Widgets
             }
         }
 
+        private float _norm;
+
         private void Awake()
         {
             CurrentAmount = amount;
@@ -75,10 +77,12 @@ namespace Widgets
 
         private void SetNorm(float norm)
         {
+            if (_norm == norm) return;
+            _norm = norm;
             foreach (var fill in fills) fill.fillAmount = norm;
             if (IsFinished)
             {
-                Debug.Log($"FillBar Finished ({(int)(norm * 100)}%)");
+//                Debug.Log($"FillBar Finished ({(int)(norm * 100)}%)");
                 CurrentAmount = amount;
                 onFinished?.Invoke(amount);
             }
