@@ -46,10 +46,10 @@ namespace State
         public T State;
 
         public bool KeepHistory;
-    
-        [NonSerialized]
-        public readonly List<T> History = new List<T>();
         public event EventHandler<StateChange<T>> OnChange;
+
+        [Header("Debug")]
+        public List<T> History = new List<T>();
 
         [NonSerialized]
         private int _locked;
@@ -58,6 +58,8 @@ namespace State
         {
             base.OnEnable();
             History.Clear();
+            State = InitialState;
+            _locked = 0;
             StateMachines.Register(this);
         }
 
@@ -86,8 +88,8 @@ namespace State
             if (_locked > 0) return;
             var color = Color;
             Debug.Log($"<color={color.LogString()}>{GetType().ShortName()}</color>: Reset");
-            RequestState(InitialState, true);
             History.Clear();
+            RequestState(InitialState, true);
         }
 
         public void Click_RequestState(T state)
