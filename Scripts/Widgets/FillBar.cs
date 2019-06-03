@@ -21,18 +21,19 @@ namespace Widgets
         public Image[] fills;
         [CanBeNull] public Text text;
         public FloatEvent onFinished;
+        public float floatTolerance = Util.Maths.TOLERANCE;
 
         [Header("Config")] 
         public bool showPercent = false;
         public string textFormat = "{0}/{1}";
-        public float smoothing = 5f;
+        public float smoothing = 10f;
         public int segments = 0;
         public AnimationCurve normCurve = AnimationCurve.Linear(0, 0, 1, 1);
 
         public bool IsAnimating => !IsPaused && !IsFinished;
         public bool IsPaused { get; private set; }
        
-        public bool IsFinished => CurrentAmount.IsAbout(amount); 
+        public bool IsFinished => CurrentAmount.IsAbout(amount, floatTolerance); 
 
         private float _lastTier = 0;
 
