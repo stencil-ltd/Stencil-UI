@@ -79,6 +79,10 @@ namespace Lobbing
             if (overrides != null)
             {
                 var scale = obj.transform.localScale;
+                if (overrides.ForceScale != null)
+                {
+                    scale = overrides.ForceScale.Value;
+                }
                 scale.Scale(overrides.InitialScale);
                 obj.transform.localScale = scale;
             }

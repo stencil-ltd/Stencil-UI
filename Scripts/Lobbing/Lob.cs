@@ -47,6 +47,7 @@ namespace Lobbing
         public LobDivision Division;
 
         public Vector3 InitialScale = Vector3.one;
+        public Vector3? ForceScale = null;
 
         public bool? ReverseDirection;
         public Transform From;
