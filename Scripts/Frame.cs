@@ -2,6 +2,7 @@
 using Ads;
 using Binding;
 using JetBrains.Annotations;
+using UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -9,10 +10,8 @@ using Developers = Dev.Developers;
 
 namespace Plugins.UI
 {
-    public class Frame : MonoBehaviour
+    public class Frame : Controller<Frame>
     {
-        public static Frame Instance;
-        
         public static Rect SafeArea => Screen.safeArea;
 
         [CanBeNull] 
@@ -48,9 +47,9 @@ namespace Plugins.UI
         
         private float _bannerHeight;
 
-        private void Awake()
+        protected override void OnAwake()
         {
-            Instance = this;
+            base.OnAwake();
             this.Bind();
             var safe = SafeArea;
             TopSafePadding = Screen.height - safe.yMax;
@@ -101,7 +100,6 @@ namespace Plugins.UI
 
         void OnDestroy()
         {
-            if (Instance == this) Instance = null;
             StencilAds.OnBannerChange -= OnBanner;
         }
 
