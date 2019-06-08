@@ -9,12 +9,7 @@
             Instance = (T)this;
             OnAwake();
         }
-
-        private void OnEnable()
-        {
-            Instance = (T)this;
-        }
-
+        
         public override void Register()
         {
             Instance = (T)this;
