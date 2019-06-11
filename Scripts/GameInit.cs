@@ -38,6 +38,7 @@ namespace Init
             base.Awake();
             if (!Valid) return;
             Application.targetFrameRate = 60;
+            Screen.sleepTimeout = SleepTimeout.NeverSleep;
             Screen.orientation = ScreenOrientation.Portrait;
             var _ = Tracking.Instance;
             new GameObject("Main Thread Dispatch").AddComponent<UnityMainThreadDispatcher>();
