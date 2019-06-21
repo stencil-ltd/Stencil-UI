@@ -5,8 +5,6 @@ using Analytics;
 using CustomOrder;
 using Plugins.UI;
 using Scripts.RemoteConfig;
-using Store;
-using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Util;
@@ -53,12 +51,12 @@ namespace Init
 
         private IEnumerator SetupLocation()
         {
-            #if !STENCIL_LOCATION
-            yield break;
-            #endif
+            #if STENCIL_LOCATION
             Input.location.Start();
             yield return null;
             Input.location.Stop();
+            #endif
+            yield break;
         }
 
         private static void SetupFacebook()
