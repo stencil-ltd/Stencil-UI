@@ -88,8 +88,10 @@ namespace Init
                     Debug.Log($"Firebase Configuration: {success}");
                     if (success)
                     {
+                        var prod = StencilRemote.IsProd();
+                        if (!prod) Firebase.FirebaseApp.LogLevel = Firebase.LogLevel.Debug;
                         var settings = FirebaseRemoteConfig.Settings;
-                        settings.IsDeveloperMode = !StencilRemote.IsProd();
+                        settings.IsDeveloperMode = !prod;
                         FirebaseRemoteConfig.Settings = settings;
                         var cache = settings.IsDeveloperMode ? TimeSpan.Zero : TimeSpan.FromHours(StencilRemote.CacheHours);
                         FirebaseRemoteConfig.FetchAsync(cache).ContinueWith(task1 =>
