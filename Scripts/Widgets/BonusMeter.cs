@@ -39,6 +39,12 @@ namespace UI.Bonus
             bar.SetAmount(MarkedProgress, pointsPerLevel);
         }
 
+        private void OnDisable()
+        {
+            _isProcessing = false;
+            _isRewarding = false;
+        }
+
         private void OnEnable()
         {
             StartCoroutine(ProcessQueue());
@@ -55,8 +61,9 @@ namespace UI.Bonus
             yield return new WaitUntil(() => !_isProcessing); 
         }
 
-        private IEnumerator ProcessQueue()
+        private IEnumerator ProcessQueue(bool force = false)
         {
+            Debug.Log("Process Queue");
             var chunk = Queue.AtMost(pointsPerLevel - MarkedProgress);
             if (chunk > 0)
             {
@@ -65,28 +72,39 @@ namespace UI.Bonus
                 Queue -= chunk;
             }
 
-            if (_isProcessing)
+            if (!force && _isProcessing)
             {
+                Debug.Log("Process Queue: Awaiting existing operation...");
                 yield return Await();
+                Debug.Log("Process Queue: Finished existing operation");
                 yield break;
             }
             
+            Debug.Log("Process Queue: Await Bar...");
             _isProcessing = true;
             yield return bar.Await();
+            Debug.Log("Process Queue: Bar Complete");
 
             if (!_isRewarding && MarkedProgress == pointsPerLevel)
             {
+                Debug.Log("Process Queue: Reward...");
                 yield return Reward();
-                _isProcessing = false;
-                yield return ProcessQueue();
+                Debug.Log("Process Queue: Reward Complete");
+                yield return ProcessQueue(true);
             }
-            _isProcessing = false;
+            else
+            {
+                _isProcessing = false;
+                Debug.Log("Process Queue: Exit");
+            }
         }
 
         private IEnumerator Reward()
         {
+            Debug.Log("Bonus Reward");
             _isRewarding = true;
             yield return onReward?.Invoke();
+            Debug.Log("Bonus Reward Invoked");
             bar.SetAmount(0);
             MarkedProgress = 0;
             _isRewarding = false;
