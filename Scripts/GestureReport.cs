@@ -20,7 +20,9 @@ namespace UI
             var path = Application.temporaryCachePath + "/logs.txt";
             File.WriteAllText(path, str);
             if (!Application.isEditor)
-                NativeShare.Share("", path, mimeType: "text/plain", chooser: true);
+                new NativeShare()
+                    .AddFile(path, "text/plain")
+                    .Share();
             else Debug.Log($"Share: {path}");      
         }
     }
