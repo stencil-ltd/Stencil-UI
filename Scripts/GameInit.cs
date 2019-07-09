@@ -5,17 +5,18 @@ using Analytics;
 using CustomOrder;
 using Plugins.UI;
 using Scripts.RemoteConfig;
+using Store;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Util;
 
-#if !EXCLUDE_FIREBASE
+#if STENCIL_FIREBASE
 using Firebase;
 using Firebase.RemoteConfig;
 using Firebase.Messaging;
 #endif
 
-#if !EXCLUDE_FACEBOOK
+#if STENCIL_FACEBOOK
 using Facebook.Unity;
 #endif
 
@@ -61,7 +62,7 @@ namespace Init
 
         private static void SetupFacebook()
         {
-#if !EXCLUDE_FACEBOOK
+#if STENCIL_FACEBOOK
             FB.Mobile.FetchDeferredAppLinkData();
             FB.Init(() =>
             {
@@ -74,7 +75,7 @@ namespace Init
 
         private void SetupFirebase()
         {
-#if !EXCLUDE_FIREBASE
+#if STENCIL_FIREBASE
             FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
             {
                 var dependencyStatus = task.Result;
@@ -114,7 +115,7 @@ namespace Init
         }
         
 
-#if !EXCLUDE_FIREBASE
+#if STENCIL_FIREBASE
         private void SetupPush()
         {
             FirebaseMessaging.RequestPermissionAsync();

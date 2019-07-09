@@ -19,11 +19,13 @@ namespace UI
             var str = LogCollector.GetLogString();
             var path = Application.temporaryCachePath + "/logs.txt";
             File.WriteAllText(path, str);
+            #if STENCIL_NATSHARE
             if (!Application.isEditor)
                 new NativeShare()
                     .AddFile(path, "text/plain")
                     .Share();
-            else Debug.Log($"Share: {path}");      
+            #endif
+            Debug.Log($"Share: {path}");      
         }
     }
 }

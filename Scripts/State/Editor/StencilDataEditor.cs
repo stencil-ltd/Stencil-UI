@@ -1,4 +1,4 @@
-#if !EXCLUDE_ODIN
+#if ODIN_INSPECTOR
 using Sirenix.OdinInspector.Editor;
 #endif
 
@@ -8,7 +8,7 @@ using UnityEngine;
 namespace State.Editor
 {
     [CustomEditor(typeof(StencilData), true)]
-    #if !EXCLUDE_ODIN
+    #if ODIN_INSPECTOR
     public class StencilDataEditor : OdinEditor
     #else
     public class StencilDataEditor : UnityEditor.Editor

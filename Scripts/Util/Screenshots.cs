@@ -23,10 +23,12 @@ namespace Util.UI
             yield return new WaitForEndOfFrame();
             var path = "screenshot.png";
             ScreenCapture.CaptureScreenshot(path);
+            #if STENCIL_NATSHARE
             new NativeShare()
                 .SetTitle(title)
                 .AddFile($"{Application.persistentDataPath}/{path}")
                 .Share();
+            #endif
         }
     }
 }
