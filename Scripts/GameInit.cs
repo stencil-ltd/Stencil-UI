@@ -4,6 +4,7 @@ using Ads;
 using Analytics;
 using CustomOrder;
 using Plugins.UI;
+using Scripts.Prefs;
 using Scripts.RemoteConfig;
 using Store;
 using UnityEngine;
@@ -24,7 +25,13 @@ namespace Init
 {
     [ExecutionOrder(-100)]
     public class GameInit : Permanent<GameInit>
-    {   
+    {
+        public static DateTime FirstLaunch
+        {
+            get => StencilPrefs.Default.GetDateTime("game_init_first_launch").Value;
+            set => StencilPrefs.Default.SetDateTime("game_init_first_launch", value).Save();
+        }
+        
         public bool Started { get; private set; }
         
         public static bool FirebaseReady;
@@ -36,6 +43,8 @@ namespace Init
         {
             base.Awake();
             if (!Valid) return;
+            var first = StencilPrefs.Default.GetDateTime("game_init_first_launch");
+            if (first == null) FirstLaunch = DateTime.UtcNow;
             Application.targetFrameRate = 60;
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
             Screen.orientation = ScreenOrientation.Portrait;
