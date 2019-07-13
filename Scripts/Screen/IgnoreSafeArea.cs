@@ -8,6 +8,9 @@ namespace UI
     [RequireComponent(typeof(RectTransform))]
     public class IgnoreSafeArea : MonoBehaviour
     {
+        public float topScale = 1f;
+        public float bottomScale = 1f;
+        
         [Bind] 
         private RectTransform _rect;
 
@@ -28,8 +31,8 @@ namespace UI
             if (_updated) return;
             _updated = true;
             
-            var top = Frame.Instance.TopSafePadding;
-            var bot = Frame.Instance.BottomSafePadding;
+            var top = Frame.Instance.TopSafePadding * topScale;
+            var bot = Frame.Instance.BottomSafePadding * bottomScale;
 
             var min = _rect.anchorMin;
             var max = _rect.anchorMax;
