@@ -31,6 +31,8 @@ namespace Init
             get => StencilPrefs.Default.GetDateTime("game_init_first_launch").Value;
             set => StencilPrefs.Default.SetDateTime("game_init_first_launch", value).Save();
         }
+
+        public static TimeSpan SinceFirstLaunch => DateTime.UtcNow - FirstLaunch;
         
         public bool Started { get; private set; }
         
