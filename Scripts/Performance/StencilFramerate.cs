@@ -6,11 +6,11 @@ namespace UI.Performance
 {
     public class StencilFramerate : Controller<StencilFramerate>
     {
-        private int _count = 0;
+        private static int _count = 0;
 
-        public void Acquire() => _count++;
-        public void Release() => _count--;
-        public bool UseFullRate() => _count > 0;
+        public static void Acquire() => _count++;
+        public static void Release() => _count--;
+        public static bool UseFullRate() => _count > 0;
 
         private void Update()
         {

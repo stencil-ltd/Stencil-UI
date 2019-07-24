@@ -19,13 +19,13 @@ namespace UI.Performance
         private void OnEnable()
         {
             if (_animating)
-                StencilFramerate.Instance.Acquire();
+                StencilFramerate.Acquire();
         }
 
         private void OnDisable()
         {
             if (_animating)
-                StencilFramerate.Instance.Release();
+                StencilFramerate.Release();
         }
 
         private void Update()
@@ -34,9 +34,9 @@ namespace UI.Performance
             if (_animating == animating) return;
             _animating = animating;
             if (animating) 
-                StencilFramerate.Instance.Acquire();
+                StencilFramerate.Acquire();
             else 
-                StencilFramerate.Instance.Release();
+                StencilFramerate.Release();
         }
 
         private bool Animating()
