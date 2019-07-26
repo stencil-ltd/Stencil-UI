@@ -28,12 +28,21 @@ namespace Init
     {
         public static DateTime FirstLaunch
         {
-            get => StencilPrefs.Default.GetDateTime("game_init_first_launch").Value;
-            set => StencilPrefs.Default.SetDateTime("game_init_first_launch", value).Save();
+            get
+            {
+                var retval = StencilPrefs.Default.GetDateTime("game_init_first_launch");
+                if (retval == null)
+                {
+                    retval = DateTime.UtcNow;
+                    FirstLaunch = retval.Value;
+                }
+                return retval.Value;
+            }
+            private set => StencilPrefs.Default.SetDateTime("game_init_first_launch", value).Save();
         }
 
         public static TimeSpan SinceFirstLaunch => DateTime.Now - FirstLaunch.ToLocalTime();
-        
+
         public bool Started { get; private set; }
         
         public static bool FirebaseReady;
