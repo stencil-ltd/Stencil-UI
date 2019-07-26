@@ -54,8 +54,7 @@ namespace Init
         {
             base.Awake();
             if (!Valid) return;
-            var first = StencilPrefs.Default.GetDateTime("game_init_first_launch");
-            if (first == null) FirstLaunch = DateTime.UtcNow;
+            var unused = FirstLaunch;
             Application.targetFrameRate = 60;
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
             Screen.orientation = ScreenOrientation.Portrait;
