@@ -1,5 +1,4 @@
 ﻿using System;
-using Ads;
 using Binding;
 using JetBrains.Annotations;
 using UI;
@@ -20,7 +19,6 @@ namespace Plugins.UI
         [CanBeNull] public Mask GraphicMask;
         
         public RectTransform Contents;
-        [CanBeNull] public RectTransform Scrim;
         
         [Tooltip("This frame will auto-adjust to the ad area.")]
         public bool AutoAdZone = true;
@@ -44,8 +42,6 @@ namespace Plugins.UI
 
         private float SizeFactor => _scaler.referenceResolution.x / Screen.width;
         private float FinalScale => SizeFactor;
-        
-        private float _bannerHeight;
 
         protected override void OnAwake()
         {
@@ -61,9 +57,6 @@ namespace Plugins.UI
                 if (DebugNotchBottom >= 1f)
                     BottomSafePadding = DebugNotchBottom;
             }
-
-            if (BottomSafePadding >= 1f && AdSettings.Instance != null)
-                BottomSafePadding += AdSettings.Instance.NudgeBottomSafeZone;
             
             _scaler = GetComponentInParent<CanvasScaler>();
             _canvas = _scaler.GetComponent<Canvas>();
@@ -72,20 +65,11 @@ namespace Plugins.UI
         void Start()
         {
             eventSystem = EventSystem.current;
-            if (_bannerHeight <= 1f) SetBannerHeight(0f, true);
-            StencilAds.OnBannerChange += OnBanner;
-            OnBanner(null, null);
-            
             if (GraphicMask != null)
             {
                 GraphicMask.enabled = true;
                 GraphicMask.GetComponent<Image>().enabled = true;
             }
-        }
-
-        private void OnBanner(object sender, EventArgs eventArgs)
-        {
-            SetBannerHeight(StencilAds.BannerHeight, false);
         }
 
         void OnMouseUpAsButton()
@@ -98,54 +82,21 @@ namespace Plugins.UI
             if (_collider != null) _collider.enabled = OnClick != null;
         }
 
-        void OnDestroy()
-        {
-            StencilAds.OnBannerChange -= OnBanner;
-        }
-
         public void Lock()
         {
             lockCount++;
             _SetLocked(true);
         }
 
-        private void SetScrim(bool top)
-        {
-            if (Scrim == null) return;
-            var height = _bannerHeight;
-            height += top ? TopSafePadding : BottomSafePadding;
-            Scrim?.SetInsetAndSizeFromParentEdge(top ? RectTransform.Edge.Top : RectTransform.Edge.Bottom, 0, height);
-            Debug.Log($"Set Scrim {height}");
-        }
-
-        private void SetContents(bool top)
+        private void SetContents()
         {
             var hTop = TopSafePadding;
-            if (top) hTop += _bannerHeight;
             var hBot = BottomSafePadding;
-            if (!top) hBot += _bannerHeight == 0 ? 0 : _bannerHeight + BannerNudge;
             Debug.Log($"Set Contents {hTop}x{hBot}");
             Contents.offsetMax = new Vector2(0, -hTop);
             Contents.offsetMin = new Vector2(0, hBot);
         }
-
-        public void SetBannerHeight(float pixelHeight, bool top)
-        {
-            if (Scrim != null)
-            {
-                var ratio = 1f;
-                if (Application.isEditor) 
-                    ratio = 2f;
-                else if (StencilAds.BannerNeedsScale)
-                    ratio = FinalScale;
-                _bannerHeight = pixelHeight * ratio;
-                Debug.Log($"Setting banner height to {_bannerHeight} ({pixelHeight} x {ratio:N2})");
-                Scrim?.gameObject.SetActive(pixelHeight >= 1f);
-            }
-            SetScrim(top);
-            SetContents(top);
-        }
-
+        
         private void _SetLocked(bool locked)
         {
             if (eventSystem == null) eventSystem = EventSystem.current;

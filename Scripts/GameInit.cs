@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections;
-using Ads;
-using Analytics;
 using CustomOrder;
-using Plugins.UI;
 using Scripts.Prefs;
-using Scripts.RemoteConfig;
-using Store;
+using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Util;
+
+#if STENCIL_ANALYTICS
+using Analytics;
+#endif
 
 #if STENCIL_FIREBASE
 using Firebase;
 using Firebase.RemoteConfig;
 using Firebase.Messaging;
+using Scripts.RemoteConfig;
 #endif
 
 #if STENCIL_FACEBOOK
@@ -24,7 +25,7 @@ using Facebook.Unity;
 namespace Init
 {
     [ExecutionOrder(-100)]
-    public class GameInit : Permanent<GameInit>
+    public class GameInit : PermanentV2<GameInit>
     {
         public static DateTime FirstLaunch
         {
@@ -49,23 +50,21 @@ namespace Init
 
         public static event EventHandler OnFacebookInit;
         public static event EventHandler OnFirebaseInit;
-        
-        protected sealed override void Awake()
+
+        protected override void OnAwake()
         {
-            base.Awake();
-            if (!Valid) return;
+            base.OnAwake();
             var unused = FirstLaunch;
             Application.targetFrameRate = 60;
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
             Screen.orientation = ScreenOrientation.Portrait;
-            var _ = Tracking.Instance;
             new GameObject("Main Thread Dispatch").AddComponent<UnityMainThreadDispatcher>();
-            BuyableManager.Init();
             SceneManager.sceneLoaded += _OnNewScene;
             StartCoroutine(SetupLocation());
+            SetupAnalytics();
             SetupFirebase();
             SetupFacebook();
-            StencilAds.Init();
+            SetupAds();
             OnInit();
         }
 
@@ -90,6 +89,22 @@ namespace Init
                 OnFacebookInit?.Invoke();
             });
 #endif
+        }
+
+        private void SetupAnalytics()
+        {
+            #if STENCIL_ANALYTICS
+            var _ = Tracking.Instance;
+            #else
+            Debug.LogError("Not using Analytics services! Consider #STENCIL_ANALYTICS");
+            #endif
+        }
+
+        private void SetupAds()
+        {
+            #if STENCIL_ADS
+            StencilAds.Init();
+            #endif
         }
 
         private void SetupFirebase()
@@ -158,7 +173,6 @@ namespace Init
 
         private void _OnNewScene(Scene arg0, LoadSceneMode arg1)
         {
-            StencilAds.CheckReload();
             OnNewScene(arg0, arg1);
         }
 

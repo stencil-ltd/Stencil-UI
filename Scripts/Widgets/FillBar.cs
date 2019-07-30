@@ -1,10 +1,7 @@
-using System;
 using System.Collections;
 using JetBrains.Annotations;
-using Scripts.Maths;
 using StencilEvents;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 using Util;
 

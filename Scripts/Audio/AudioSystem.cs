@@ -1,19 +1,21 @@
 ﻿using System;
 using Plugins.UI;
+using UI;
 using UnityEngine;
 using UnityEngine.Audio;
 
 namespace Audio
 {
-    public class AudioSystem : Permanent<AudioSystem>
+    public class AudioSystem : PermanentV2<AudioSystem>
     {
         public AudioMixer Mixer;
         
         public event EventHandler<bool> OnSfxChanged;
         public event EventHandler<bool> OnMusicChanged;
 
-        private void Start()
+        protected override void OnStart()
         {
+            base.OnStart();
             UpdateMixers();
         }
 
