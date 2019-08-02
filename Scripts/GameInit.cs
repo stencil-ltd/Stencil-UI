@@ -11,6 +11,10 @@ using Util;
 using Analytics;
 #endif
 
+#if STENCIL_ADS
+using Ads;
+#endif
+
 #if STENCIL_FIREBASE
 using Firebase;
 using Firebase.RemoteConfig;
