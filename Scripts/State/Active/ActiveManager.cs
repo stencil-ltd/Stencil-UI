@@ -91,6 +91,11 @@ namespace State.Active
                 var check = g.Check();
                 if (check == null) continue;
                 hasActive = true;
+                if (g.Veto && check == false)
+                {
+                    active = false;
+                    break;
+                }
                 switch(Op)
                 {
                     case Operation.And:

@@ -23,7 +23,7 @@ namespace Util.UI
             yield return new WaitForEndOfFrame();
             var path = "screenshot.png";
             ScreenCapture.CaptureScreenshot(path);
-            #if STENCIL_NATIVE_SHARE
+            #if !UNITY_EDITOR && STENCIL_NATIVE_SHARE
             new NativeShare()
                 .SetTitle(title)
                 .AddFile($"{Application.persistentDataPath}/{path}")
