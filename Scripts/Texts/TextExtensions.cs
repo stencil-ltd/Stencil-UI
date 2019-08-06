@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using Dirichlet.Numerics;
 using Scripts.Util;
 using UnityEngine;
@@ -12,6 +13,27 @@ namespace Util
         private static readonly AnimationCurve Curve 
             = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
+        public static List<int> GetIndicesOf(this string str, string pattern, bool caseSensitive = true)
+        {
+            var searchStrLen = pattern.Length;
+            if (searchStrLen == 0) {
+                return new List<int>();
+            }
+
+            var startIndex = 0;
+            var index = 0;
+            var indices = new List<int>();
+            if (!caseSensitive)
+            {
+                str = str.ToLower();
+                pattern = pattern.ToLower();
+            }
+            while ((index = str.IndexOf(pattern, startIndex, StringComparison.Ordinal)) > -1) {
+                indices.Add(index);
+                startIndex = index + searchStrLen;
+            }
+            return indices;
+        }
         
         public static void SetAmount(this Text text, string format, string numberType, UInt128 to)
         {
