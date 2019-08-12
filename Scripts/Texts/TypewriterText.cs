@@ -33,7 +33,9 @@ namespace Scripts.Texts
 
         public IEnumerator Await()
         {
-            yield return new WaitUntil(IsFinished);   
+            Debug.Log($"TypewriterText: Await {_text}");
+            yield return new WaitUntil(IsFinished);
+            Debug.Log($"TypewriterText: Finished {_text}");
         }
 
         public IEnumerator SetText(string text)

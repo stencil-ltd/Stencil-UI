@@ -15,6 +15,7 @@ namespace Scripts.Util
             var norm = anim.GetCurrentAnimatorStateInfo(0).normalizedTime;
             Debug.Log($"Animator awaiting {duration} - {leadTime} [norm: {norm}]");
             yield return new WaitForSeconds(duration - leadTime);
+            Debug.Log($"Animator await finished");
         }
     }
 }
