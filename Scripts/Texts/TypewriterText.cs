@@ -27,7 +27,7 @@ namespace Scripts.Texts
 
         private void Update()
         {
-            _length += Time.deltaTime * speed;
+            _length = (_length + Time.deltaTime * speed).AtMost(_text.Length);
             Refresh();
         }
 
@@ -64,7 +64,7 @@ namespace Scripts.Texts
 
         private void Refresh()
         {
-            _label.text = _text.Substring(0, ((int) _length).AtMost(_text.Length));
+            _label.text = _text.Substring(0, (int) _length);
         }
     }
 }
