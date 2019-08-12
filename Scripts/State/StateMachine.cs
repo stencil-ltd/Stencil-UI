@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Plugins.Util;
+using Scripts.Prefs;
 using UnityEngine;
 using Util;
 
@@ -45,6 +46,7 @@ namespace State
         public T InitialState;
         public T State;
 
+        public string PersistenceKey;
         public bool KeepHistory;
         public event EventHandler<StateChange<T>> OnChange;
 
@@ -53,12 +55,22 @@ namespace State
 
         [NonSerialized]
         private int _locked;
-        
+
+        private T? PersistedState
+        {
+            get
+            {
+                var idx = StencilPrefs.Default.GetInt(PersistenceKey, -1);
+                return (T?) (idx >= 0 ? (object) idx : null);
+            }
+            set => StencilPrefs.Default.SetInt(PersistenceKey, value != null ? (int) (object) value.Value : -1);
+        }
+
         protected override void OnEnable()
         {
             base.OnEnable();
             History.Clear();
-            State = InitialState;
+            State = GetInitialState(false);
             _locked = 0;
             StateMachines.Register(this);
         }
@@ -67,7 +79,7 @@ namespace State
         {
             base.OnFirstLoad();
             if (Application.isPlaying)
-                ResetState();
+                ResetState(false);
         }
 
         public T? PopState()
@@ -83,13 +95,21 @@ namespace State
             return retval;
         }
 
-        public void ResetState()
+        private T GetInitialState(bool clearPersistence = true)
+        {
+            var state = InitialState;
+            if (!clearPersistence && !string.IsNullOrEmpty(PersistenceKey))
+                state = PersistedState ?? InitialState;
+            return state;
+        }
+
+        public void ResetState(bool clearPersistence = true)
         {
             if (_locked > 0) return;
             var color = Color;
             Debug.Log($"<color={color.LogString()}>{GetType().ShortName()}</color>: Reset");
             History.Clear();
-            RequestState(InitialState, true);
+            RequestState(GetInitialState(clearPersistence), true);
         }
 
         public void Click_RequestState(T state)
@@ -124,6 +144,8 @@ namespace State
         {
             var old = State;
             State = state;
+            if (!string.IsNullOrEmpty(PersistenceKey))
+                PersistedState = State;
             if (notify) Objects.OnMain(() => NotifyChanged(old));
         }
 

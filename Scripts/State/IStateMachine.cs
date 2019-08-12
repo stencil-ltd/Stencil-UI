@@ -2,6 +2,6 @@
 {
     public interface IStateMachine
     {
-        void ResetState();
+        void ResetState(bool clearPersistence = true);
     }
 }
