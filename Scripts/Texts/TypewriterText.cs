@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Binding;
+using Scripts.Maths;
 using UnityEngine;
 using UnityEngine.UI;
 using Util;
@@ -63,7 +64,7 @@ namespace Scripts.Texts
 
         private void Refresh()
         {
-            _label.text = _text.Substring(0, (int) _length);
+            _label.text = _text.Substring(0, ((int) _length).AtMost(_text.Length));
         }
     }
 }
