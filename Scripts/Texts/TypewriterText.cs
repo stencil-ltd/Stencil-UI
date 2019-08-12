@@ -12,7 +12,7 @@ namespace Scripts.Texts
     [RequireComponent(typeof(Text))]
     public class TypewriterText : MonoBehaviour
     {
-        public float speed = 5f;
+        public float speed = 50f;
         
         [Bind] private Text _label;
         
