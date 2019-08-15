@@ -26,7 +26,7 @@ namespace Scripts.Widgets
                 var selected = button == button1;
                 var anim = button1.GetComponent<Animator>();
                 anim.SetBool(Selected, selected);
-//                if (selected && !animated) anim.Play(0, 0, 1f);
+                if (selected && !animated) anim.Play(0, 0, 1f);
             }
             onSelect?.Invoke(index);
         }
