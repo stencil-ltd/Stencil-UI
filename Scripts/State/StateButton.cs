@@ -13,6 +13,9 @@ namespace State
         public bool popStateInstead;
         public bool replaceHistory;
         public bool rotateInstead;
+
+        [Range(0, 1)] 
+        public float disabledAlpha = 1f;
         
         private StateMachine<T> _machine;
 
@@ -36,8 +39,33 @@ namespace State
                 {
                     _machine.RequestState(state, replaceHistory: replaceHistory);
                 }
-                    
             });
+        }
+
+        private void OnEnable()
+        {
+            _machine.OnChange += _OnState;
+            _Refresh();
+        }
+
+        private void OnDisable()
+        {
+            _machine.OnChange -= _OnState;
+        }
+
+        private void _OnState(object sender, StateChange<T> e)
+        {
+            _Refresh();
+        }
+
+        private void _Refresh()
+        {
+            var cg = GetComponent<CanvasGroup>();
+            if (cg != null)
+            {
+                var alpha = _machine.State.Equals(state) ? 1f : disabledAlpha;
+                cg.alpha = alpha;
+            }
         }
     }
 }
