@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using Ads.IronSrc;
 using CustomOrder;
 using Scripts.Prefs;
 using UI;
@@ -14,6 +13,7 @@ using Analytics;
 
 #if STENCIL_ADS
 using Ads;
+using Ads.IronSrc;
 #endif
 
 #if STENCIL_FIREBASE
