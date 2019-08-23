@@ -1,4 +1,3 @@
-using System;
 using Binding;
 using Plugins.UI;
 using UnityEngine;

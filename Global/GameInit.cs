@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Ads.IronSrc;
 using CustomOrder;
 using Scripts.Prefs;
 using UI;
@@ -108,7 +109,11 @@ namespace Init
         private void SetupAds()
         {
             #if STENCIL_ADS
-            StencilAds.Init();
+                #if STENCIL_IRONSRC
+                    StencilAds.Init(new IronSrcRewarded(), new IronSrcInterstitial());
+                #else
+                    StencilAds.Init();
+                #endif
             #endif
         }
 
