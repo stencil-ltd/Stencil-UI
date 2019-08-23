@@ -1,8 +1,8 @@
 {
     "name": "Stencil-UI",
     "references": [
-        "GUID:b060e4da221ad426bb8e6a91bba572bc",
-        "GUID:f41f255b18f174d5c9d23177eac18ef7"
+        "Stencil-Core",
+        "Stencil-Analytics"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
