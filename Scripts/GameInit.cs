@@ -19,6 +19,7 @@ using Ads;
 using Firebase;
 using Firebase.RemoteConfig;
 using Firebase.Messaging;
+using Scripts.Auth;
 using Scripts.RemoteConfig;
 #endif
 
@@ -146,6 +147,7 @@ namespace Init
                         SetupPush();
                         OnFirebaseInit?.Invoke();
                     }
+                    StencilAuth.Init();
                     OnFirebase(success);
                 });
             });
