@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using CustomOrder;
+using Scripts.Lifecycle;
 using Scripts.Prefs;
-using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Util;
@@ -22,8 +22,7 @@ using Facebook.Unity;
 
 namespace Init
 {
-    [ExecutionOrder(-100)]
-    public class GameInit : PermanentV2<GameInit>
+    public class GameInit : AbstractGameInit
     {
         public static DateTime FirstLaunch
         {
