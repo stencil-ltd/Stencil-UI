@@ -16,14 +16,6 @@ using Ads;
 using Ads.IronSrc;
 #endif
 
-#if STENCIL_FIREBASE
-using Firebase;
-using Firebase.RemoteConfig;
-using Firebase.Messaging;
-using Scripts.Auth;
-using Scripts.RemoteConfig;
-#endif
-
 #if STENCIL_FACEBOOK
 using Facebook.Unity;
 #endif
@@ -51,11 +43,8 @@ namespace Init
         public static TimeSpan SinceFirstLaunch => DateTime.Now - FirstLaunch.ToLocalTime();
 
         public bool Started { get; private set; }
-        
-        public static bool FirebaseReady;
 
         public static event EventHandler OnFacebookInit;
-        public static event EventHandler OnFirebaseInit;
 
         protected override void OnAwake()
         {
@@ -68,7 +57,6 @@ namespace Init
             SceneManager.sceneLoaded += _OnNewScene;
             StartCoroutine(SetupLocation());
             SetupAnalytics();
-            SetupFirebase();
             SetupFacebook();
             SetupAds();
             OnInit();
@@ -116,64 +104,6 @@ namespace Init
                 #endif
             #endif
         }
-
-        private void SetupFirebase()
-        {
-#if STENCIL_FIREBASE
-            FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
-            {
-                var dependencyStatus = task.Result;
-                var success = dependencyStatus == DependencyStatus.Available;
-                if (!success)
-                    Debug.LogError($"Could not resolve all Firebase dependencies: {dependencyStatus}");
-                FirebaseReady = success;
-
-                Objects.Enqueue(() =>
-                {
-                    Debug.Log($"Firebase Configuration: {success}");
-                    if (success)
-                    {
-                        var prod = StencilRemote.IsProd();
-                        if (!prod) Firebase.FirebaseApp.LogLevel = Firebase.LogLevel.Debug;
-                        var settings = FirebaseRemoteConfig.Settings;
-                        settings.IsDeveloperMode = !prod;
-                        FirebaseRemoteConfig.Settings = settings;
-                        var cache = settings.IsDeveloperMode ? TimeSpan.Zero : TimeSpan.FromHours(StencilRemote.CacheHours);
-                        FirebaseRemoteConfig.FetchAsync(cache).ContinueWith(task1 =>
-                        {
-                            if (task1.IsFaulted)
-                            {
-                                Debug.LogError($"Firebase Remote Config failed. {task1.Exception?.InnerException.Message}");
-                                return;
-                            }
-                            FirebaseRemoteConfig.ActivateFetched();
-                            Objects.Enqueue(StencilRemote.NotifyRemoteConfig);
-                        });
-                        SetupPush();
-                        OnFirebaseInit?.Invoke();
-                    }
-                    StencilAuth.Init();
-                    OnFirebase(success);
-                });
-            });
-#endif
-        }
-        
-
-#if STENCIL_FIREBASE
-        private void SetupPush()
-        {
-            FirebaseMessaging.RequestPermissionAsync();
-            if (StencilRemote.IsDeveloper())
-                FirebaseMessaging.SubscribeAsync("dev/remote");
-            else 
-                FirebaseMessaging.UnsubscribeAsync("dev/remote");
-            FirebaseMessaging.TokenReceived += (sender, args) =>
-            {
-                Debug.Log($"Firebase/FCM Token: {args.Token}");    
-            };
-        }
-#endif
         
         protected virtual void OnApplicationPause(bool pauseStatus)
         {
@@ -185,10 +115,6 @@ namespace Init
         private void _OnNewScene(Scene arg0, LoadSceneMode arg1)
         {
             OnNewScene(arg0, arg1);
-        }
-
-        protected virtual void OnFirebase(bool success)
-        {
         }
 
         protected virtual void OnInit()
