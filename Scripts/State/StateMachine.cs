@@ -156,9 +156,12 @@ namespace State
         void NotifyChanged(T old)
         {
             var color = Color;
-            Debug.Log($"<color={color.LogString()}>{GetType().ShortName()} -></color> {State}");
+            var name = ToString();
+            Debug.Log($"<color={color.LogString()}>{name} -></color> {State}");
             #if STENCIL_ANALYTICS
-            Tracking.Record($"[{GetType().ShortName()}] {old} -> {State}");
+            Tracking.Instance
+                .Track($"state_change_{name.ToLower()}", "old", old, "new", State)
+                .Record($"[{GetType().ShortName()}] {old} -> {State}");
             #endif
             OnChange?.Invoke(this, new StateChange<T>(old, State));
         }
