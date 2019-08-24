@@ -6,6 +6,10 @@ using Scripts.Prefs;
 using UnityEngine;
 using Util;
 
+#if STENCIL_ANALYTICS
+using Analytics;
+#endif
+
 namespace State
 {
     public static class StateMachines
@@ -153,6 +157,9 @@ namespace State
         {
             var color = Color;
             Debug.Log($"<color={color.LogString()}>{GetType().ShortName()} -></color> {State}");
+            #if STENCIL_ANALYTICS
+            Tracking.Record($"[{GetType().ShortName()}] {old} -> {State}");
+            #endif
             OnChange?.Invoke(this, new StateChange<T>(old, State));
         }
 
