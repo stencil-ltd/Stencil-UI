@@ -10,11 +10,6 @@ using Util;
 using Analytics;
 #endif
 
-#if STENCIL_ADS
-using Ads;
-using Ads.IronSrc;
-#endif
-
 namespace Init
 {
     public class GameInit : AbstractGameInit
@@ -49,7 +44,6 @@ namespace Init
             SceneManager.sceneLoaded += _OnNewScene;
             StartCoroutine(SetupLocation());
             SetupAnalytics();
-            SetupAds();
             OnInit();
         }
 
@@ -72,17 +66,6 @@ namespace Init
             #endif
         }
 
-        private void SetupAds()
-        {
-            #if STENCIL_ADS
-                #if STENCIL_IRONSRC
-                    StencilAds.Init(new IronSrcRewarded(), new IronSrcInterstitial());
-                #else
-                    StencilAds.Init();
-                #endif
-            #endif
-        }
-        
         protected virtual void OnApplicationPause(bool pauseStatus)
         {
 #if STENCIL_IRONSRC
