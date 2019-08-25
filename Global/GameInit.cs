@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using CustomOrder;
 using Scripts.Lifecycle;
 using Scripts.Prefs;
 using UnityEngine;
@@ -14,10 +13,6 @@ using Analytics;
 #if STENCIL_ADS
 using Ads;
 using Ads.IronSrc;
-#endif
-
-#if STENCIL_FACEBOOK
-using Facebook.Unity;
 #endif
 
 namespace Init
@@ -43,8 +38,6 @@ namespace Init
 
         public bool Started { get; private set; }
 
-        public static event EventHandler OnFacebookInit;
-
         protected override void OnAwake()
         {
             base.OnAwake();
@@ -56,7 +49,6 @@ namespace Init
             SceneManager.sceneLoaded += _OnNewScene;
             StartCoroutine(SetupLocation());
             SetupAnalytics();
-            SetupFacebook();
             SetupAds();
             OnInit();
         }
@@ -69,19 +61,6 @@ namespace Init
             Input.location.Stop();
             #endif
             yield break;
-        }
-
-        private static void SetupFacebook()
-        {
-#if STENCIL_FACEBOOK
-            FB.Mobile.FetchDeferredAppLinkData();
-            FB.Init(() =>
-            {
-                Debug.Log($"Facebook init: {FB.IsInitialized} [authed={FB.IsLoggedIn}]");
-                FB.ActivateApp();
-                OnFacebookInit?.Invoke();
-            });
-#endif
         }
 
         private void SetupAnalytics()
