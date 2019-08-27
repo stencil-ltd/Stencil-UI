@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Binding;
+using JetBrains.Annotations;
 using Scripts.Maths;
+using UniRx.Async;
 using UnityEngine;
 using UnityEngine.UI;
 using Util;
@@ -31,22 +33,21 @@ namespace Scripts.Texts
             Refresh();
         }
 
-        public IEnumerator Await()
+        public async UniTask Await()
         {
             Debug.Log($"TypewriterText: Await {_text}");
-            yield return new WaitUntil(IsFinished);
+            await UniTask.WaitUntil(IsFinished);
             Debug.Log($"TypewriterText: Finished {_text}");
         }
 
-        public IEnumerator SetText(string text)
+        public UniTask SetText(string text)
         {
             Debug.Log($"Typewriter: set text to '{text}'");
-            // TODO cancel existing calls.
             _text = text ?? "";
             _length = 0;
             _boundaries = text.GetIndicesOf(" ", false);
             Debug.Log($"Boundaries: {_boundaries}");
-            yield return Await();
+            return Await();
         }
         
         public bool Skip()
