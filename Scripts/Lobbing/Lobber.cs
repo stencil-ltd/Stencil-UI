@@ -32,7 +32,8 @@ namespace Lobbing
         public static int ActiveCount = 0;
         
         [Header("General")] 
-        public bool ForceToUi = true;
+        public bool ForceToUi;
+        public bool ResetLobScale;
         
         [Header("Objects")] 
         public GameObject Prefab;
@@ -73,6 +74,7 @@ namespace Lobbing
             
             var obj = Instantiate(projectile, Container ?? to.parent, true);
             obj.transform.position = from.position;
+            if (ResetLobScale) obj.transform.localScale = Vector3.one;
             if (ForceToUi)
                 obj.transform.CastIntoUi();
             obj.transform.SetAsLastSibling();
@@ -172,7 +174,7 @@ namespace Lobbing
                 if (ForceToUi)
                     part.transform.CastIntoUi();
             }
-            SfxOneShot.Instance.Play(SfxBegin);
+            if (SfxBegin != null) SfxOneShot.Instance.Play(SfxBegin);
             OnLobBegan?.Invoke(lob);
         }
 
@@ -185,7 +187,7 @@ namespace Lobbing
                     part.transform.CastIntoUi();
             }
             
-            SfxOneShot.Instance.Play(SfxEnd);
+            if (SfxEnd != null) SfxOneShot.Instance.Play(SfxEnd);
             OnLobEnded?.Invoke(lob);
             overrides?.OnComplete(lob);
             Destroy(lob.Projectile);
