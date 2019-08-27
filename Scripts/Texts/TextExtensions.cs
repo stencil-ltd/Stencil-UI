@@ -13,6 +13,12 @@ namespace Util
         private static readonly AnimationCurve Curve 
             = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
+        public static string Capitalize(this string value)
+        {
+            if (string.IsNullOrEmpty(value)) return value;
+            return char.ToUpper(value[0]) + value.Substring(1);
+        }
+        
         public static List<int> GetIndicesOf(this string str, string pattern, bool caseSensitive = true)
         {
             var searchStrLen = pattern.Length;
