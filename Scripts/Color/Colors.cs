@@ -11,7 +11,7 @@ namespace Plugins.Util
             return $"#{(byte)(color.r * 255):X2}{(byte)(color.g * 255):X2}{(byte)(color.b * 255):X2}";
         }
 
-        public static Color Alpha(this Image image, float alpha)
+        public static Color Alpha(this MaskableGraphic image, float alpha)
         {
             var color = image.color;
             color.a = alpha;
