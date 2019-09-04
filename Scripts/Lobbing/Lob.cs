@@ -9,7 +9,11 @@ namespace Lobbing
     public class LobStyle
     {
         public float Duration = 0.4f;
-        public bool Elastic = true;
+        public LobEasing Easing = LobEasing.None;
+        
+        [Obsolete]
+        public bool Elastic;
+        [Obsolete]
         public float Elasticity = 0.5f;
 
         public static LobStyle Standard => new LobStyle();
