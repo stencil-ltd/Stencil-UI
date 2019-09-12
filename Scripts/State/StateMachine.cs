@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Plugins.Util;
 using Scripts.Prefs;
+using UniRx.Async;
 using UnityEngine;
 using Util;
 
@@ -144,13 +145,14 @@ namespace State
             --_locked;
         }
         
-        private void _SetState(T state, bool notify = true)
+        private async void _SetState(T state, bool notify = true)
         {
             var old = State;
             State = state;
             if (!string.IsNullOrEmpty(PersistenceKey))
                 PersistedState = State;
-            if (notify) Objects.OnMain(() => NotifyChanged(old));
+            await UniTask.SwitchToMainThread();
+            NotifyChanged(old);
         }
 
         void NotifyChanged(T old)
