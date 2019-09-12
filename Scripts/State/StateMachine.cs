@@ -160,7 +160,7 @@ namespace State
             Debug.Log($"<color={color.LogString()}>{name} -></color> {State}");
             #if STENCIL_ANALYTICS
             Tracking.Instance
-                .Track($"state_change_{name.ToLower()}", "old", old, "new", State)
+                .Track($"state_change_{name.ToLower()}", "old", old.ToString(), "new", State.ToString())
                 .Record($"[{GetType().ShortName()}] {old} -> {State}");
             #endif
             OnChange?.Invoke(this, new StateChange<T>(old, State));
