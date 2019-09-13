@@ -1,11 +1,14 @@
 using System;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using State.Active;
+using UnityEngine;
 
 namespace State
 {
     public abstract class StateGate<StateType> : ActiveGate where StateType : struct
     {
+        [Header("State Gate")]
         public bool Invert;
         public bool AndDestroy;
         public bool RevertOnExit;
