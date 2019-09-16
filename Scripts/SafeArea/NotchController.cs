@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Stencil.UI.SafeArea
 {
-    public class NotchRoot : Controller<NotchRoot>
+    public class NotchController : Controller<NotchController>
     {
         public static Rect SafeArea => Screen.safeArea;
         
@@ -20,7 +20,6 @@ namespace Stencil.UI.SafeArea
         protected override void OnAwake()
         {
             base.OnAwake();
-            this.Bind();
             var safe = SafeArea;
             TopSafePadding = Screen.height - safe.yMax;
             BottomSafePadding = safe.yMin;

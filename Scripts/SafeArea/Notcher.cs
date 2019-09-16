@@ -30,8 +30,8 @@ namespace Stencil.UI.SafeArea
             if (_updated) return;
             _updated = true;
             
-            var top = NotchRoot.Instance.TopSafePadding * topScale;
-            var bot = NotchRoot.Instance.BottomSafePadding * bottomScale;
+            var top = NotchController.Instance.TopSafePadding * topScale;
+            var bot = NotchController.Instance.BottomSafePadding * bottomScale;
 
             var min = _rect.anchorMin;
             var max = _rect.anchorMax;
