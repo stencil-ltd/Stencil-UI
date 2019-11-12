@@ -1,5 +1,6 @@
 using Binding;
 using Dev;
+using Scripts.RemoteConfig;
 using UI;
 using UnityEngine;
 
@@ -10,9 +11,10 @@ namespace Stencil.UI.SafeArea
         public static Rect SafeArea => Screen.safeArea;
         
         [Header("Debug")] 
-        public bool DebugNotch;
-        public float DebugNotchTop = 132;
-        public float DebugNotchBottom = 102;
+        public bool debugNotch;
+        public bool yesEvenOnDevice;
+        public float debugNotchTop = 132;
+        public float debugNotchBottom = 102;
         
         public float TopSafePadding { get; private set; }
         public float BottomSafePadding { get; private set; }
@@ -23,12 +25,12 @@ namespace Stencil.UI.SafeArea
             var safe = SafeArea;
             TopSafePadding = Screen.height - safe.yMax;
             BottomSafePadding = safe.yMin;
-            if (Application.isEditor && Developers.Enabled && DebugNotch)
+            if (debugNotch && (yesEvenOnDevice || Application.isEditor) && StencilRemote.IsDeveloper())
             {
-                if (DebugNotchTop >= 1f)
-                    TopSafePadding = DebugNotchTop;
-                if (DebugNotchBottom >= 1f)
-                    BottomSafePadding = DebugNotchBottom;
+                if (debugNotchTop >= 1f)
+                    TopSafePadding = debugNotchTop;
+                if (debugNotchBottom >= 1f)
+                    BottomSafePadding = debugNotchBottom;
             }
         }
     }
