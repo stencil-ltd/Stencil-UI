@@ -33,7 +33,7 @@ namespace Stencil.UI.SafeArea
         {
             if (_updated) return;
             _updated = true;
-            var scale = _canvas.scaleFactor;
+            var scale = NotchController.Instance.IgnoreCanvasScale ? 1f : _canvas.scaleFactor;
             var top = NotchController.Instance.TopSafePadding * topScale / scale;
             var bot = NotchController.Instance.BottomSafePadding * bottomScale / scale;
 
@@ -93,6 +93,7 @@ namespace Stencil.UI.SafeArea
                       $"Screen={Screen.currentResolution}, " +
                       $"NotchController=({ct.TopSafePadding}x{ct.BottomSafePadding}), " +
                       $"SafeArea={Screen.safeArea}, " +
+                      $"Lossy Scale={_rect.lossyScale}, " +
                       $"ppu={ppu}, " +
                       $"ppu2={ppu2}, " +
                       $"dppu={dppu}, " +
