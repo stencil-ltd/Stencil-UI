@@ -33,6 +33,9 @@ namespace Dev
                 case 60:
                     color = Color.green;
                     break;
+                default:
+                    color = Color.blue;
+                    break;
             }
 
             _text.color = color;
