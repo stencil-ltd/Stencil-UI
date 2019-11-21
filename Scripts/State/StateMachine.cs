@@ -52,7 +52,7 @@ namespace State
         public T State;
 
         public string PersistenceKey;
-        public bool KeepHistory;
+        public bool KeepHistory = true;
         public event EventHandler<StateChange<T>> OnChange;
 
         [Header("Debug")]
