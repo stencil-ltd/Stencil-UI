@@ -42,7 +42,6 @@ namespace Scripts.Texture
 
         public static bool ShouldApplyVideoHack()
         {
-            return true;
 #if UNITY_EDITOR || !UNITY_ANDROID
             return false;
 #endif
