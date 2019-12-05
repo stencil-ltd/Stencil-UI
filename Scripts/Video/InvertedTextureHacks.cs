@@ -35,8 +35,14 @@ namespace Scripts.Texture
         public static void InvertedVideoHack3(this RawImage image, bool mirror = false)
         {
             var scale = image.transform.localScale;
-            if (mirror) scale.x *= -1;
-            if (ShouldApplyVideoHack()) scale.y *= -1;
+            if (ShouldApplyVideoHack())
+            {
+                scale.x = mirror ? 1 : -1f;
+                scale.y *= -1;
+            } else if (mirror)
+            {
+                scale.x *= -1;
+            }
             image.transform.localScale = scale;
         }
 
@@ -47,7 +53,9 @@ namespace Scripts.Texture
 #endif
             var build = new AndroidJavaClass("android.os.Build");
             var mfg = build.GetStatic<string>("MANUFACTURER").ToLower().Trim();
-            return mfg == "google";
+            var retval = mfg == "google";
+            Debug.Log($"Video Hack: {retval} ({mfg})");
+            return retval;
         }
     }
 }
