@@ -11,7 +11,7 @@ namespace Stencil.Ui.Widgets
         public GameObject check;
 
         [Bind]
-        private Button _button;
+        public Button button { get; private set; }
 
         public bool IsChecked
         {
