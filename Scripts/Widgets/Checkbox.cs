@@ -1,12 +1,13 @@
 using System;
 using Binding;
+using UI;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Stencil.Ui.Widgets
 {
     [RequireComponent(typeof(Button))]
-    public class Checkbox : MonoBehaviour
+    public class Checkbox : RegisterableBehaviour
     {
         public GameObject check;
 
@@ -19,8 +20,9 @@ namespace Stencil.Ui.Widgets
             set => check.SetActive(value);
         }
 
-        private void Awake()
+        public override void Register()
         {
+            base.Register();
             this.Bind();
         }
     }
