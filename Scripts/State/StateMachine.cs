@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Plugins.Data;
 using Plugins.Util;
 using Scripts.Prefs;
 using UniRx.Async;
@@ -53,6 +54,8 @@ namespace State
 
         public string PersistenceKey;
         public bool KeepHistory = true;
+        public bool RespectResetButton = false;
+        
         public event EventHandler<StateChange<T>> OnChange;
 
         [Header("Debug")]
@@ -83,8 +86,20 @@ namespace State
         protected override void OnFirstLoad()
         {
             base.OnFirstLoad();
+            ResetButton.OnGlobalReset += OnResetButton;
             if (Application.isPlaying)
                 ResetState(false);
+        }
+
+        private void OnDestroy()
+        {
+            ResetButton.OnGlobalReset -= OnResetButton;
+        }
+
+        private void OnResetButton(object sender, EventArgs args)
+        {
+            if (RespectResetButton)
+                ResetState(true);
         }
 
         public T? PopState()
