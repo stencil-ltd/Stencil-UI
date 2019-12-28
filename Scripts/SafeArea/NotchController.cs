@@ -1,6 +1,4 @@
-using Binding;
 using Dev;
-using Scripts.RemoteConfig;
 using UI;
 using UnityEngine;
 
@@ -16,7 +14,6 @@ namespace Stencil.UI.SafeArea
         public float debugNotchTop = 132;
         public float debugNotchBottom = 102;
 
-        [RemoteField("notch_ignore_scale")] 
         public bool IgnoreCanvasScale { get; } = false;
 
         public float TopSafePadding { get; private set; }
@@ -25,11 +22,10 @@ namespace Stencil.UI.SafeArea
         protected override void OnAwake()
         {
             base.OnAwake();
-            this.BindRemoteConfig();
             var safe = SafeArea;
             TopSafePadding = Screen.height - safe.yMax;
             BottomSafePadding = safe.yMin;
-            if (debugNotch && (yesEvenOnDevice || Application.isEditor) && StencilRemote.IsDeveloper())
+            if (debugNotch && (yesEvenOnDevice || Application.isEditor) && Developers.Enabled)
             {
                 if (debugNotchTop >= 1f)
                     TopSafePadding = debugNotchTop;
